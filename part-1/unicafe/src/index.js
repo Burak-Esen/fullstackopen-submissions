@@ -13,11 +13,16 @@ const Buttons = (probs) =>{
 }
 
 const Statistic = (probs) =>{
+  let total=probs.bad+probs.neutral+probs.good
+  let score=probs.good-probs.bad
   return(
     <div>
       <p>good {probs.good}</p>
       <p>neutral {probs.neutral}</p>
       <p>bad {probs.bad}</p>
+      <p>all {total}</p>
+      <p>average {score/total}</p>
+      <p>positive {probs.good*100/total} %</p>
     </div>
   )
 }
