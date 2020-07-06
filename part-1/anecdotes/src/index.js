@@ -4,10 +4,10 @@ import './index.css';
 
 
 const App = (props) => {
-  const [selected, setSelected] = useState(0)
-  const [votes, setVotes] = useState(new Array(anecdotes.length).fill(0))
+  const [selected, setSelected] = useState(Math.floor(Math.random()*props.anecdotes.length))
+  const [votes, setVotes] = useState(new Array(props.anecdotes.length).fill(0))
   const handlerNext = () =>{
-    setSelected(Math.floor(Math.random()*anecdotes.length))
+    setSelected(Math.floor(Math.random()*props.anecdotes.length))
   }
   const handlerVote = () =>{
     votes[selected]+=1;
@@ -15,10 +15,14 @@ const App = (props) => {
   }
   return (
     <div>
+      <h2>Anecdote of the Day</h2>
       <p>{props.anecdotes[selected]}</p>
       <p>has {votes[selected]} votes</p>
       <button onClick={handlerVote}>vote</button>
       <button onClick={handlerNext}>next anecdote</button>
+      <h2>Anecdote with most votes</h2>
+      <p>{props.anecdotes[votes.indexOf(Math.max(...votes))]}</p>
+      <p>has {Math.max(...votes)} votes</p>
     </div>
   )
 }
