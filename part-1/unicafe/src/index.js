@@ -15,6 +15,9 @@ const Buttons = (probs) =>{
 const Statistic = (probs) =>{
   let total=probs.bad+probs.neutral+probs.good
   let score=probs.good-probs.bad
+  if(total===0){
+    return <p>No feedback given</p>
+  }
   return(
     <div>
       <p>good {probs.good}</p>
