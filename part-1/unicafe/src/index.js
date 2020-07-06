@@ -12,21 +12,31 @@ const Buttons = (probs) =>{
   )
 }
 
-const Statistic = (probs) =>{
-  let total=probs.bad+probs.neutral+probs.good
+const Statistics = (probs) =>{
+  let total=probs.good+probs.neutral+probs.bad
   let score=probs.good-probs.bad
   if(total===0){
     return <p>No feedback given</p>
   }
   return(
-    <div>
-      <p>good {probs.good}</p>
-      <p>neutral {probs.neutral}</p>
-      <p>bad {probs.bad}</p>
-      <p>all {total}</p>
-      <p>average {score/total}</p>
-      <p>positive {probs.good*100/total} %</p>
-    </div>
+    <table>
+      <tbody>
+        <Statistic text="good" value ={probs.good} />
+        <Statistic text="neutral" value ={probs.neutral} />
+        <Statistic text="bad" value ={probs.bad} />
+        <Statistic text="all" value ={total} />
+        <Statistic text="average" value ={score/total} />
+        <Statistic text="positive" value ={probs.good*100/total +" %"} />
+      </tbody>
+    </table>
+  )
+}
+const Statistic = (probs) =>{
+  return (
+    <tr>
+      <td>{probs.text}</td>
+      <td>{probs.value}</td>
+    </tr>
   )
 }
 
@@ -43,7 +53,7 @@ const App = () => {
       <h2>give feedback</h2>
       <Buttons handlerG={handlerGood} handlerN={handlerNeutral} handlerB={handlerBad}/>
       <h2>statistic</h2>
-      <Statistic good={good} neutral={neutral} bad={bad}/>
+      <Statistics good={good} neutral={neutral} bad={bad}/>
     </div>
   )
 }
