@@ -7,15 +7,18 @@ const App = () => {
   const [ newName, setNewName ] = useState('')
   const addHandler = (event) => {
     event.preventDefault()
-    let personObj ={}
-    personObj.name=newName
-    setPersons(persons.concat(personObj))
-    setNewName("")
-    console.log(persons)
+    if(persons.every(person=>person.name!==newName)){
+      let personObj ={}
+      personObj.name=newName
+      setPersons(persons.concat(personObj))
+      setNewName("")
+    }else{
+      alert(`${newName} is already added to phonebook`)
+      setNewName("")
+    }
   }
   const newNameOnCh = (event) =>{
     setNewName(event.target.value)
-    console.log(event.target.value)
   }
 
   return (
@@ -30,7 +33,7 @@ const App = () => {
         </div>
       </form>
       <h2>Numbers</h2>
-      {persons.map(person=><p>{person.name}</p>)}
+      {persons.map(person=><p key={person.name}>{person.name}</p>)}
     </div>
   )
 }
