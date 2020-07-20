@@ -1,4 +1,5 @@
 import React, {useState} from 'react'
+import Weather from "./Weather"
 
 const FilteredCountries = (props) => {
   let [showFilter, setShowFilter ] = useState(new Array(props.countries.length).fill(false))
@@ -7,8 +8,10 @@ const FilteredCountries = (props) => {
     let temp=[].concat(showFilter)
     if(temp[index]===false){
       temp[index]=true
+      e.target.innerHTML="hide"
     }else{
       temp[index]=false
+      e.target.innerHTML="show"
     }
     setShowFilter(temp)
   }
@@ -26,6 +29,7 @@ const FilteredCountries = (props) => {
               {country.languages.map(lang=><li key={lang.name}>{lang.name}</li>)}
             </ul>
             <img height={150} src={country.flag} alt={country.name + ' flag'}/>
+            <Weather city={country.capital} />
           </div>
         </div>
       )}
