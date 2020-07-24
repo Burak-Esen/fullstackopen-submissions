@@ -18,7 +18,9 @@ const PersonForm = (props) => {
       if (window.confirm(`${props.newName} is already added to phonebook, replace the old number with a new one?`)) {
         let person = props.persons.find(a => a.name === props.newName)
         person.number = props.newNumber
-        peopleService.update(person.id, person)
+        peopleService.update(person.id, person).catch(()=>{
+          props.notif(`Information of ${person.name} has already been removed from server`, true)
+        })
         props.setPersons(props.persons.concat([]))
         props.notif(`${person.name} is updated`)
       }

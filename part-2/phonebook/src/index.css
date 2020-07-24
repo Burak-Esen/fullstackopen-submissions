@@ -12,13 +12,17 @@ code {
     monospace;
 }
 
-.notification{
+.notification {
   color: green;
   background: lightgrey;
   font-size: 20px;
   border-style: solid;
-  border-color: greens;
+  border-color: green;
   border-radius: 5px;
   padding: 10px;
   margin-bottom: 10px;
+}
+.notification--error{
+  color:red;
+  border-color: red;
 }

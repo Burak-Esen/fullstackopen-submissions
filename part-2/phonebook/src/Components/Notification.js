@@ -6,7 +6,7 @@ const Notification = (props) => {
     return null
   }
   return (
-    <div class="notification">
+    <div className={props.isError ? "notification notification--error" : "notification"}>
       {props.notificationMessage}
     </div>
   )

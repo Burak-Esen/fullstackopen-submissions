@@ -11,9 +11,12 @@ const App = () => {
   const [ newNumber, setNewNumber ] = useState('')
   const [ filt , setFilt ] = useState('')
   const [ notificationMessage, setNotificationMessage ] = useState(null)
-  const notif = msg =>{
+  const [ isError, setIsError ]=useState(false)
+  const notif = (msg, isError=false) =>{
     setNotificationMessage(msg)
+    setIsError(isError)
     setTimeout(()=>setNotificationMessage(null),3000)
+    setTimeout(()=>setIsError(false),3000)
   }
   useEffect(()=>{
     peopleService.getAll().then(response=>{
@@ -28,7 +31,7 @@ const App = () => {
       <Filter setFilt={setFilt}/>
 
       <h2>add a new</h2>
-      <Notification notificationMessage={notificationMessage} />
+      <Notification notificationMessage={notificationMessage} isError={isError} />
       <PersonForm 
         persons={persons}
         setPersons={setPersons}
