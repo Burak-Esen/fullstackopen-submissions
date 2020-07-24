@@ -14,7 +14,12 @@ const PersonForm = (props) => {
       props.setNewName("")
       props.setNewNumber("")
     }else{
-      alert(`${props.newName} is already added to phonebook`)
+      if(window.confirm(`${props.newName} is already added to phonebook, replace the old number with a new one?`)){
+        let person = props.persons.find(a=>a.name===props.newName)
+        person.number= props.newNumber
+        peopleService.update(person.id,person)
+        props.setPersons(props.persons.concat([]))
+      }
       props.setNewName("")
       props.setNewNumber("")
     }
