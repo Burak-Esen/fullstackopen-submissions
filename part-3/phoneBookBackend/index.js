@@ -1,7 +1,12 @@
 const express = require('express')
+let morgan = require('morgan')
 let people = require('./db')
+
+
+const logger =morgan(':method route::url status::status req.body-len::req[content-length] res.body-len::res[content-length] - :response-time ms')
 const app = express()
 app.use(express.json())
+app.use(logger)
 
 app.get('/', (req, res) => {
   res.send(`<h2>Welcome</h2>
@@ -51,5 +56,9 @@ app.post('/api/people', (request, response) => {
   response.json(person)
 })
 
+const unknownEndpoint = (request, response) => {
+  response.status(404).send({ error: 'unknown endpoint' })
+}
+app.use(unknownEndpoint)
 const PORT = 3001
 app.listen(PORT, () => console.log(`Server Running on http://localhost:${PORT}`))
