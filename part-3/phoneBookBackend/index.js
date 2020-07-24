@@ -41,6 +41,10 @@ app.post('/api/people', (request, response) => {
     return response.status(400).json({
       error: 'content missing'
     })
+  }else if(!people.every(p=>p.name!==person.name)){
+    return response.status(400).json({
+      error: 'name must be unique'
+    })
   }
   person.id = generateId()
   people = people.concat(person)
