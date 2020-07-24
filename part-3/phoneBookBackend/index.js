@@ -1,23 +1,28 @@
 const express = require('express')
 let morgan = require('morgan')
-let people = require('./db')
+const cors = require('cors')
 
+let people = require('./db')
 
 const logger =morgan(':method route::url status::status req.body-len::req[content-length] res.body-len::res[content-length] req.body::req-body - :response-time ms')
 morgan.token('req-body', function (req, res) { return JSON.stringify(req.body) })
 const app = express()
 app.use(express.json())
 app.use(logger)
+app.use(cors())
+app.use(express.static('build'))
 
 app.get('/', (req, res) => {
   res.send(`<h2>Welcome</h2>
   <p>Go to <a href="http://localhost:${PORT}/api/people">people API</a></p>
   <p>Go to <a href="http://localhost:${PORT}/info">phonebook info</a></p>`)
 })
+
 app.get('/info', (req, res)=>{
   res.send(`<p>Phonebook has info for ${people.length} people</p>
   <p>${new Date()}</p>`)
 })
+
 app.get('/api/people', (req, res) => {
   res.json(people)
 })
@@ -41,6 +46,7 @@ const generateId = () => {
   const id = Math.round(Math.random()*1000000000)
   return id
 }
+
 app.post('/api/people', (request, response) => {
   const person = request.body
   if (!person.name && !person.number) {
