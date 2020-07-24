@@ -29,7 +29,7 @@ app.get('/api/people/:id', (req, res) => {
 app.delete('/api/people/:id', (req, res) => {
   const id = parseInt(req.params.id)
   people = people.filter(person => person.id !== id)
-  response.status(204).end()
+  res.status(204).end()
 })
 const generateId = () => {
   const maxId = people.length > 0
@@ -39,13 +39,11 @@ const generateId = () => {
 }
 app.post('/api/people', (request, response) => {
   const person = request.body
-  if (!person.content) {
+  if (!person.name && !person.number) {
     return response.status(400).json({
       error: 'content missing'
     })
   }
-  person.important = person.important || false
-  person.date = new Date()
   person.id = generateId()
   people = people.concat(person)
   response.json(person)
