@@ -3,13 +3,18 @@ import PersonForm from './Components/PersonForm'
 import Filter from "./Components/Filter"
 import Persons from "./Components/Persons"
 import peopleService from './services/peopleService'
+import Notification from './Components/Notification'
 
 const App = () => {
   const [ persons, setPersons ] = useState([]) 
   const [ newName, setNewName ] = useState('')
   const [ newNumber, setNewNumber ] = useState('')
   const [ filt , setFilt ] = useState('')
-
+  const [ notificationMessage, setNotificationMessage ] = useState(null)
+  const notif = msg =>{
+    setNotificationMessage(msg)
+    setTimeout(()=>setNotificationMessage(null),3000)
+  }
   useEffect(()=>{
     peopleService.getAll().then(response=>{
     setPersons(response.data)
@@ -23,18 +28,24 @@ const App = () => {
       <Filter setFilt={setFilt}/>
 
       <h2>add a new</h2>
-
+      <Notification notificationMessage={notificationMessage} />
       <PersonForm 
         persons={persons}
         setPersons={setPersons}
         newName={newName}
         setNewName={setNewName}
         newNumber={newNumber}
-        setNewNumber={setNewNumber}/>
+        setNewNumber={setNewNumber}
+        notif={notif}/>
 
       <h2>Numbers</h2>
 
-      <Persons persons={persons} setPersons={setPersons} filt={filt} />
+      <Persons
+        persons={persons}
+        setPersons={setPersons}
+        notif={notif}
+        filt={filt}/>
+
     </div>
   )
 }
