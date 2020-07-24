@@ -32,10 +32,8 @@ app.delete('/api/people/:id', (req, res) => {
   res.status(204).end()
 })
 const generateId = () => {
-  const maxId = people.length > 0
-    ? Math.max(...people.map(n => n.id))
-    : 0
-  return maxId + 1
+  const id = Math.round(Math.random()*1000000000)
+  return id
 }
 app.post('/api/people', (request, response) => {
   const person = request.body
