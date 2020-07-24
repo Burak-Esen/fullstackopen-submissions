@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import PersonForm from './Components/PersonForm'
 import Filter from "./Components/Filter"
 import Persons from "./Components/Persons"
-import axios from 'axios'
+import peopleService from './services/peopleService'
 
 const App = () => {
   const [ persons, setPersons ] = useState([]) 
@@ -11,13 +11,9 @@ const App = () => {
   const [ filt , setFilt ] = useState('')
 
   useEffect(()=>{
-    async function Respond(){
-      const promise = await axios.get("http://localhost:3001/persons")
-      setPersons(promise.data)
-    }
-    Respond().catch(e => {
-      console.log('There has been a problem with your fetch operation: ' + e.message);
-    });
+    peopleService.getAll().then(response=>{
+    setPersons(response.data)
+    })
   },[])
   
   

@@ -1,4 +1,5 @@
 import React from 'react'
+import peopleService from '../services/peopleService'
 
 const PersonForm = (props) => {
   const addHandler = (event) => {
@@ -7,6 +8,8 @@ const PersonForm = (props) => {
       let personObj ={}
       personObj.name=props.newName
       personObj.number=props.newNumber
+      personObj.id=props.persons.length+1
+      peopleService.create(personObj)
       props.setPersons(props.persons.concat(personObj))
       props.setNewName("")
       props.setNewNumber("")
