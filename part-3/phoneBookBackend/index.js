@@ -5,9 +5,13 @@ app.use(express.json())
 
 app.get('/', (req, res) => {
   res.send(`<h2>Welcome</h2>
-  <p>Go to <a href="http://localhost:${PORT}/api/people">people API</a></p>`)
+  <p>Go to <a href="http://localhost:${PORT}/api/people">people API</a></p>
+  <p>Go to <a href="http://localhost:${PORT}/info">phonebook info</a></p>`)
 })
-
+app.get('/info', (req, res)=>{
+  res.send(`<p>Phonebook has info for ${people.length} people</p>
+  <p>${new Date()}</p>`)
+})
 app.get('/api/people', (req, res) => {
   res.json(people)
 })
