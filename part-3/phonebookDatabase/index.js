@@ -25,11 +25,6 @@ Person.find({}).then(result => {
   console.log(error)
 })
 
-app.get('/', (req, res) => {
-  res.send(`<h2>Welcome</h2>
-  <p>Go to <a href="http://localhost:${PORT}/api/people">people API</a></p>
-  <p>Go to <a href="http://localhost:${PORT}/info">phonebook info</a></p>`)
-})
 
 app.get('/info', (req, res)=>{
   res.send(`<p>Phonebook has info for ${people.length} people</p>
@@ -37,12 +32,9 @@ app.get('/info', (req, res)=>{
 })
 
 app.get('/api/people', (req, res) => {
-  let purple=[]
   Person.find({}).then(result => {
     if(result){
-      result.forEach(person => {
-        purple.push(person)
-      })
+      res.json(result).end()
     }else{
       res.status(400).end()
     }
@@ -51,7 +43,6 @@ app.get('/api/people', (req, res) => {
     console.log(error)
     res.status(500).end()
   })
-  res.json(purple)
 })
 
 app.get('/api/people/:id', (request, response) => {
@@ -84,7 +75,7 @@ app.put('/api/people/:id',(request,response)=>{
   }
   personToChange = request.body
   const id = request.params.id
-  Person.findOneAndUpdate( {id:id},{ $set: request.body}, function (err){
+  Person.findOneAndUpdate( {_id:id},{ $set: request.body}, function (err){
     if(err){
       console.log(err)
       response.status(501).end()
@@ -95,8 +86,8 @@ app.put('/api/people/:id',(request,response)=>{
 })
 
 app.delete('/api/people/:id', (req, res) => {
-  const id = parseInt(req.params.id)
-  Person.deleteOne({id:id},function (err){
+  const id = req.params.id
+  Person.deleteOne({_id:id},function (err){
     if(err){
       console.log(err)
       res.status(400).end()
@@ -127,7 +118,7 @@ app.post('/api/people', (request, response) => {
   person.id = generateId()
   people = people.concat(person)
   const readyPerson = new Person(person)
-  readyPerson.save()
+  readyPerson.save()//Id old one it must change!!!!!!!!!!!!!!!!!!
   response.json(person)
 })
 
