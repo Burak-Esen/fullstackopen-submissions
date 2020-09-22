@@ -10,23 +10,15 @@ const personSchema = new mongoose.Schema({
   number: String,
   id: String
 })
-let isThereChangedId = false
-let changedIdList = []
 
 personSchema.set('toJSON', {
   transform: (document, returnedObject) => {
     if(returnedObject.id!==returnedObject._id){
-      isThereChangedId = true
-      changedIdList.push(returnedObject.id)
       returnedObject.id=returnedObject._id
     }
     delete returnedObject._id
     delete returnedObject.__v
   }
 })
-let people = mongoose.model('Person', personSchema)
-if(isThereChangedId){
 
-}
-
-module.exports = people
+module.exports = mongoose.model('Person', personSchema)

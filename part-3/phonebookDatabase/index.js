@@ -9,10 +9,10 @@ const PORT = process.env.PORT
 const logger =morgan(':method route::url status::status req.body-len::req[content-length] res.body-len::res[content-length] req.body::req-body - :response-time ms')
 morgan.token('req-body', function (req, res) { return JSON.stringify(req.body) })
 const app = express()
+app.use(express.static('build'))
 app.use(express.json())
 app.use(logger)
 app.use(cors())
-app.use(express.static('build'))
 
 let people=[];
 
@@ -21,8 +21,7 @@ Person.find({}).then(result => {
     people.push(person)
   })
 }).catch(error=>{
-  console.log('error occured while request data of people from mongoDB')
-  console.log(error)
+  next(error)
 })
 
 
@@ -31,7 +30,7 @@ app.get('/info', (req, res)=>{
   <p>${new Date()}</p>`)
 })
 
-app.get('/api/people', (req, res) => {
+app.get('/api/people', (req, res, next) => {
   Person.find({}).then(result => {
     if(result){
       res.json(result).end()
@@ -39,13 +38,11 @@ app.get('/api/people', (req, res) => {
       res.status(400).end()
     }
   }).catch(error=>{
-    console.log('error occured while request data of people from mongoDB')
-    console.log(error)
-    res.status(500).end()
+    next(error)
   })
 })
 
-app.get('/api/people/:id', (request, response) => {
+app.get('/api/people/:id', (request, response, next) => {
   Person.findById(request.params.id.toString())
     .then(person => {
       if (person) {
@@ -54,8 +51,7 @@ app.get('/api/people/:id', (request, response) => {
         response.status(404).end()
       }
     }).catch(error => {
-      console.log(error)
-      response.status(500).end()
+      next(error)
     })
 })
 // app.get('/api/people/:id', (req, res) => {
@@ -82,7 +78,7 @@ app.put('/api/people/:id',(request,response)=>{
     }else{
       response.status(204).end()
     }
-  }).catch(e=>{response.status(501).end()})
+  }).catch(error=>next(error))
 })
 
 app.delete('/api/people/:id', (req, res) => {
@@ -95,8 +91,8 @@ app.delete('/api/people/:id', (req, res) => {
       people = people.filter(person => person.id !== id)
       res.status(204).end()
     }
-  }).catch(e=>{
-    res.status(501).end()
+  }).catch(error=>{
+    next(error)
   })
 })
 const generateId = () => {
@@ -126,5 +122,14 @@ const unknownEndpoint = (request, response) => {
   response.status(404).end()
 }
 app.use(unknownEndpoint)
+
+const errorHandler = (error, request, response, next) => {
+  console.error(error.message)
+  if (error.name === 'CastError') {
+    return response.status(400).send({ error: 'malformatted id' })
+  } 
+  next(error)
+}
+app.use(errorHandler)
 
 app.listen(PORT, () => console.log(`Server Running on http://localhost:${PORT}`))
