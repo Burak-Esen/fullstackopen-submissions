@@ -5,7 +5,6 @@ let morgan = require('morgan')
 const cors = require('cors')
 let Person = require('./models/Person')
 const PORT = process.env.PORT
-const url = process.env.MONGODB_URI.replace("{0}",process.env.PASSWORD)
 
 const logger =morgan(':method route::url status::status req.body-len::req[content-length] res.body-len::res[content-length] req.body::req-body - :response-time ms')
 morgan.token('req-body', function (req, res) { return JSON.stringify(req.body) })
@@ -19,10 +18,11 @@ let people=[];
 
 Person.find({}).then(result => {
   result.forEach(person => {
-    delete person.__v
-    delete person._id
     people.push(person)
   })
+}).catch(error=>{
+  console.log('error occured while request data of people from mongoDB')
+  console.log(error)
 })
 
 app.get('/', (req, res) => {
@@ -37,27 +37,53 @@ app.get('/info', (req, res)=>{
 })
 
 app.get('/api/people', (req, res) => {
-  res.json(people)
+  let purple=[]
+  Person.find({}).then(result => {
+    if(result){
+      result.forEach(person => {
+        purple.push(person)
+      })
+    }else{
+      res.status(400).end()
+    }
+  }).catch(error=>{
+    console.log('error occured while request data of people from mongoDB')
+    console.log(error)
+    res.status(500).end()
+  })
+  res.json(purple)
 })
 
-app.get('/api/people/:id', (req, res) => {
-  const id = parseInt(req.params.id)
-  const person = people.find(person => person.id === id)
-  if (person) {
-    res.json(person)
-  } else {
-    res.status(404).end()
-  }
+app.get('/api/people/:id', (request, response) => {
+  Person.findById(request.params.id.toString())
+    .then(person => {
+      if (person) {
+        response.json(person)
+      } else {
+        response.status(404).end()
+      }
+    }).catch(error => {
+      console.log(error)
+      response.status(500).end()
+    })
 })
+// app.get('/api/people/:id', (req, res) => {
+//   const id = parseInt(req.params.id)
+//   const person = people.find(person => person.id === id)
+//   if (person) {
+//     res.json(person)
+//   } else {
+//     res.status(404).end()
+//   }
+// })
 
 app.put('/api/people/:id',(request,response)=>{
-  personToChange=people.find(person=>person.name===request.body.name)
+  let personToChange = people.find(person=>person.name===request.body.name)
   if(!personToChange){
     response.status(404).end()
   }
   personToChange = request.body
-  const id=parseInt(request.params.id)
-  console.log(request.body)
+  const id = request.params.id
   Person.findOneAndUpdate( {id:id},{ $set: request.body}, function (err){
     if(err){
       console.log(err)
@@ -70,18 +96,17 @@ app.put('/api/people/:id',(request,response)=>{
 
 app.delete('/api/people/:id', (req, res) => {
   const id = parseInt(req.params.id)
-  console.log('delete running')
   Person.deleteOne({id:id},function (err){
     if(err){
-      console.log('Mongo DB delete error')
       console.log(err)
-      res.status(501).end()
+      res.status(400).end()
+    }else{
+      people = people.filter(person => person.id !== id)
+      res.status(204).end()
     }
   }).catch(e=>{
     res.status(501).end()
   })
-  people = people.filter(person => person.id !== id)
-  res.status(204).end()
 })
 const generateId = () => {
   const id = Math.round(Math.random()*10000000000)
@@ -107,7 +132,7 @@ app.post('/api/people', (request, response) => {
 })
 
 const unknownEndpoint = (request, response) => {
-  response.status(404).send({ error: 'unknown endpoint' })
+  response.status(404).end()
 }
 app.use(unknownEndpoint)
 
