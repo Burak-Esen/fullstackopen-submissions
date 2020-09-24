@@ -54,15 +54,6 @@ app.get('/api/people/:id', (request, response, next) => {
       next(error)
     })
 })
-// app.get('/api/people/:id', (req, res) => {
-//   const id = parseInt(req.params.id)
-//   const person = people.find(person => person.id === id)
-//   if (person) {
-//     res.json(person)
-//   } else {
-//     res.status(404).end()
-//   }
-// })
 
 app.put('/api/people/:id',(request,response)=>{
   let personToChange = people.find(person=>person.name===request.body.name)
@@ -71,14 +62,20 @@ app.put('/api/people/:id',(request,response)=>{
   }
   personToChange = request.body
   const id = request.params.id
-  Person.findOneAndUpdate( {_id:id},{ $set: request.body}, function (err){
-    if(err){
-      console.log(err)
-      response.status(501).end()
-    }else{
-      response.status(204).end()
-    }
-  }).catch(error=>next(error))
+
+  Person.validate(request.body,['number']).then(()=>{
+    Person.updateOne({_id:id},{ $set: request.body}, function (error){
+      if(error){
+        response.status(501).end()
+      }else{
+        response.status(204).end()
+      }
+    }).catch(error=>{})
+  }).catch(err=>{
+    let validationErr= err.errors['number'].toString().split("\n")[0]
+    response.status(400).json({error:validationErr}).end()
+  })
+  
 })
 
 app.delete('/api/people/:id', (req, res) => {
@@ -95,41 +92,44 @@ app.delete('/api/people/:id', (req, res) => {
     next(error)
   })
 })
+
 const generateId = () => {
   const id = Math.round(Math.random()*10000000000)
   return id
 }
-
-app.post('/api/people', (request, response) => {
+app.post('/api/people', (request, response, next) => {
   const person = request.body
   if (!person.name && !person.number) {
     return response.status(400).json({
       error: 'content missing'
     })
-  }else if(!people.every(p=>p.name!==person.name)){
-    return response.status(400).json({
-      error: 'name must be unique'
-    })
   }
   person.id = generateId()
   people = people.concat(person)
   const readyPerson = new Person(person)
-  readyPerson.save()//Id old one it must change!!!!!!!!!!!!!!!!!!
-  response.json(person)
+  readyPerson.save()
+  .then(()=>{return response.json(person)})
+  .catch(error=>{
+    next(error)
+  })
+  
 })
+
+
+const errorHandler = (error, request, response, next) => {
+  //console.error(error.message)
+  if (error.name === 'CastError') {
+    return response.status(400).send({ error: 'malformatted id' })
+  }else if (error.name === 'ValidationError') {
+    return response.status(400).send({ error: error.message })
+  }
+  next(error)
+}
+app.use(errorHandler)
 
 const unknownEndpoint = (request, response) => {
   response.status(404).end()
 }
 app.use(unknownEndpoint)
-
-const errorHandler = (error, request, response, next) => {
-  console.error(error.message)
-  if (error.name === 'CastError') {
-    return response.status(400).send({ error: 'malformatted id' })
-  } 
-  next(error)
-}
-app.use(errorHandler)
 
 app.listen(PORT, () => console.log(`Server Running on http://localhost:${PORT}`))
