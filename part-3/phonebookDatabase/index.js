@@ -1,5 +1,4 @@
 const express = require('express')
-const mongoose = require('mongoose')
 require('dotenv').config()
 let morgan = require('morgan')
 const cors = require('cors')
@@ -7,21 +6,21 @@ let Person = require('./models/Person')
 const PORT = process.env.PORT
 
 const logger =morgan(':method route::url status::status req.body-len::req[content-length] res.body-len::res[content-length] req.body::req-body - :response-time ms')
-morgan.token('req-body', function (req, res) { return JSON.stringify(req.body) })
+morgan.token('req-body', function (req) { return JSON.stringify(req.body) })
 const app = express()
 app.use(express.static('build'))
 app.use(express.json())
 app.use(logger)
 app.use(cors())
 
-let people=[];
+let people=[]
 
 Person.find({}).then(result => {
   result.forEach(person => {
     people.push(person)
   })
 }).catch(error=>{
-  next(error)
+  console.log(error.response.data)
 })
 
 
@@ -70,15 +69,15 @@ app.put('/api/people/:id',(request,response)=>{
       }else{
         response.status(204).end()
       }
-    }).catch(error=>{})
+    }).catch(error=>{response.status(500).json({error:error.response.data}).end()})
   }).catch(err=>{
-    let validationErr= err.errors['number'].toString().split("\n")[0]
+    let validationErr= err.errors['number'].toString().split('\n')[0]
     response.status(400).json({error:validationErr}).end()
   })
   
 })
 
-app.delete('/api/people/:id', (req, res) => {
+app.delete('/api/people/:id', (req, res, next) => {
   const id = req.params.id
   Person.deleteOne({_id:id},function (err){
     if(err){
@@ -108,11 +107,10 @@ app.post('/api/people', (request, response, next) => {
   people = people.concat(person)
   const readyPerson = new Person(person)
   readyPerson.save()
-  .then(()=>{return response.json(person)})
-  .catch(error=>{
-    next(error)
-  })
-  
+    .then(()=>{return response.json(person)})
+    .catch(error=>{
+      next(error)
+    })
 })
 
 

@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 require('dotenv').config()
-const url = process.env.MONGODB_URI.replace("{0}",process.env.PASSWORD)
-let uniqueValidator = require('mongoose-unique-validator');
+const url = process.env.MONGODB_URI.replace('{0}',process.env.PASSWORD)
+let uniqueValidator = require('mongoose-unique-validator')
 
 //console.log(url)
 
@@ -11,7 +11,7 @@ mongoose.connect(url, {
   useFindAndModify: false,
   useCreateIndex: true
 })
-.catch(e=>{})
+  .catch(e=>{console.log(e)})
 
 const personSchema = new mongoose.Schema({
   name: {type:String, unique:true, minlength:3},
