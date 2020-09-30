@@ -25,7 +25,8 @@ blogsRouter.post('/', (request, response, next) => {
     title:request.body.title,
     author: request.body.author,
     likes: request.body.likes,
-    url: request.body.url
+    url: request.body.url,
+    category: request.body.category
   })
   newBlog.save().then(savedBlog => {
     response.json(savedBlog.toJSON())
@@ -46,7 +47,8 @@ blogsRouter.put('/:id', (request, response, next) => {
     title:request.body.title,
     url:request.body.url,
     author:request.body.author,
-    likes:request.body.likes
+    likes:request.body.likes,
+    category: request.body.category
   }
   Blog.findByIdAndUpdate(request.params.id, blog, { new:true })
     .then(updatedBlog => {
