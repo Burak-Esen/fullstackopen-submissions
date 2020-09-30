@@ -11,7 +11,20 @@ const totalLikes = blogs => {
   return total
 }
 
+const favouriteBlog = blogs => {
+  let listOfLikes = blogs.map(blog => blog.likes)
+  let maxLikes = listOfLikes.concat().sort((a,b) => b-a )[0]
+  let indexOfMaxLikes = listOfLikes.indexOf(maxLikes)
+  const mostLikedBlog = blogs[indexOfMaxLikes]
+  return {
+    title:mostLikedBlog.title,
+    author:mostLikedBlog.author,
+    likes:mostLikedBlog.likes,
+  }
+}
+
 module.exports = {
   dummy,
-  totalLikes
+  totalLikes,
+  favouriteBlog
 }
