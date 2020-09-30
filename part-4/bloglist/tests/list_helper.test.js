@@ -36,6 +36,16 @@ const listWithManyBlogs = [
     likes:0
   }
 ]
+const listWithOneBlog = [
+  {
+    _id: '5a422aa71b54a676234d17f8',
+    title: 'Go To Statement Considered Harmful',
+    author: 'Edsger W. Dijkstra',
+    url: 'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html',
+    likes: 5,
+    __v: 0
+  }
+]
 
 test('dummy returns one', () => {
   const blogs = []
@@ -43,18 +53,7 @@ test('dummy returns one', () => {
   expect(result).toBe(1)
 })
 
-describe('totalLikes tests:', () => {
-  const listWithOneBlog = [
-    {
-      _id: '5a422aa71b54a676234d17f8',
-      title: 'Go To Statement Considered Harmful',
-      author: 'Edsger W. Dijkstra',
-      url: 'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html',
-      likes: 5,
-      __v: 0
-    }
-  ]
-
+describe('== totalLikes tests ==', () => {
   test('when list has only one blog', () => {
     const result = listHelper.totalLikes(listWithOneBlog)
     expect(result).toBe(5)
@@ -66,8 +65,16 @@ describe('totalLikes tests:', () => {
   })
 })
 
-describe('favouriteblog tests:', () => {
-  test('favourite blog ', () => {
+describe('== favouriteblog tests ==', () => {
+  test('when list has only one blog', () => {
+    const result = listHelper.favouriteBlog(listWithOneBlog)
+    expect(result).toStrictEqual({
+      title: 'Go To Statement Considered Harmful',
+      author: 'Edsger W. Dijkstra',
+      likes: 5
+    })
+  })
+  test('when list has many blogs', () => {
     const result = listHelper.favouriteBlog(listWithManyBlogs)
     expect(result).toStrictEqual({
       title: 'Canonical string reduction',
@@ -77,9 +84,34 @@ describe('favouriteblog tests:', () => {
   })
 })
 
-describe('mostBlogs tests:', () => {
-  test('The author who has most blogs', () => {
+describe('== mostBlogs tests ==', () => {
+  test('when list has only one blog', () => {
+    const result = listHelper.mostBlogs(listWithOneBlog)
+    expect(result).toStrictEqual({
+      author: 'Edsger W. Dijkstra',
+      blogs: 1
+    })
+  })
+  test('when list has many blogs', () => {
     const result = listHelper.mostBlogs(listWithManyBlogs)
     expect(result).toHaveProperty('blogs', 2)
+  })
+})
+
+describe('== mostLikes tests ==', () => {
+  test('when list has only one blog', () => {
+    const result = listHelper.mostLikes(listWithOneBlog)
+    expect(result).toStrictEqual({
+      author: 'Edsger W. Dijkstra',
+      likes: 5
+    })
+  })
+
+  test('when list has many blogs', () => {
+    const result = listHelper.mostLikes(listWithManyBlogs)
+    expect(result).toStrictEqual({
+      author: 'Edsger W. Dijkstra',
+      likes: 17
+    })
   })
 })
