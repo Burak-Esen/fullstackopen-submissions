@@ -23,8 +23,29 @@ const favouriteBlog = blogs => {
   }
 }
 
+const mostBlogs = blogs => {
+  let blogCounterArray = []
+  let listOfAuthors = []
+  blogs.forEach(blog => {
+    if(listOfAuthors.includes(blog.author)){
+      blogCounterArray[listOfAuthors.indexOf(blog.author)]+=1
+    }else{
+      listOfAuthors.push(blog.author)
+      blogCounterArray.push(1)
+    }
+  })
+  console.log(blogCounterArray)
+  console.log(listOfAuthors)
+  let indexOfMaxCount = blogCounterArray.indexOf(blogCounterArray.concat().sort((a,b) => b-a)[0])
+  return {
+    author: listOfAuthors[indexOfMaxCount],
+    blogs: blogCounterArray[indexOfMaxCount]
+  }
+}
+
 module.exports = {
   dummy,
   totalLikes,
-  favouriteBlog
+  favouriteBlog,
+  mostBlogs
 }

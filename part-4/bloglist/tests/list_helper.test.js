@@ -69,11 +69,17 @@ describe('totalLikes tests:', () => {
 describe('favouriteblog tests:', () => {
   test('favourite blog ', () => {
     const result = listHelper.favouriteBlog(listWithManyBlogs)
-    console.log('******',result)
     expect(result).toStrictEqual({
       title: 'Canonical string reduction',
       author: 'Edsger W. Dijkstra',
       likes: 12
     })
+  })
+})
+
+describe('mostBlogs tests:', () => {
+  test('The author who has most blogs', () => {
+    const result = listHelper.mostBlogs(listWithManyBlogs)
+    expect(result).toHaveProperty('blogs', 2)
   })
 })
