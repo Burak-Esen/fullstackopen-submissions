@@ -32,7 +32,7 @@ test('a valid blog can be added', async () => {
     title:'Go To Statement Considered Harmful',
     author:'Edsger W. Dijkstra',
     url:'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html',
-    likes:5
+    likes:9
   }
   await api
     .post('/api/blogs')
@@ -41,6 +41,16 @@ test('a valid blog can be added', async () => {
     .expect('Content-Type', /application\/json/)
   const blogsNow = await helper.blogsInDbNow()
   expect(blogsNow).toHaveLength(helper.initialBlogs.length + 1)
+})
+
+test('likes is 0 as a default value', async () => {
+  const newBlog = {
+    title:'Full Stack Developer\'s Roadmap',
+    url:'https://dev.to/ender_minyard/full-stack-developer-s-roadmap-2k12',
+    author:'ender minyard'
+  }
+  const savedBlog = await new Blog(newBlog).save()
+  expect(savedBlog.likes).toBe(0)
 })
 
 afterAll(() => mongoose.connection.close())
