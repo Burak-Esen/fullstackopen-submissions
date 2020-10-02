@@ -21,7 +21,7 @@ test('Blogs returned as a json', async () => {
     .expect('Content-Type', /application\/json/)
 })
 
-test('is property is exist', async () => {
+test('id property is exist', async () => {
   const blogs = await helper.blogsInDbNow()
   expect(blogs[0].id).toBeDefined()
   expect(blogs[1].id).toBeDefined()
@@ -53,7 +53,7 @@ test('likes is 0 as a default value', async () => {
   expect(savedBlog.likes).toBe(0)
 })
 
-test('creating unvalid blog', async () => {
+test('status 400 when creating unvalid blog', async () => {
   const unvalidBlog ={
     author:'me',
     likes:100
@@ -64,4 +64,32 @@ test('creating unvalid blog', async () => {
     .expect(400)
 })
 
+test('delete a blog', async () => {
+  const blogsAtStart = await helper.blogsInDbNow()
+  const blogToDelete = blogsAtStart[0]
+  await api
+    .delete(`/api/blogs/${blogToDelete.id}`)
+    .expect(204)
+
+  const blogsAtEnd = await helper.blogsInDbNow()
+  expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length - 1)
+
+  const titles = blogsAtEnd.map(r => r.title)
+  expect(titles).not.toContain(blogToDelete.title)
+})
+
+test('udate likes property of a blog', async () => {
+  const blogs = await helper.blogsInDbNow()
+  let selectedBlog = blogs[0].toJSON()
+  selectedBlog.likes = 999
+  delete selectedBlog.__v
+  delete selectedBlog._id
+  delete selectedBlog.id
+  await api
+    .post('/api/blogs')
+    .send(selectedBlog)
+    .expect(200)
+  const blogsAtEnd = await helper.blogsInDbNow()
+  expect(blogsAtEnd.map(blog => blog.likes)).toContain(selectedBlog.likes)
+})
 afterAll(() => mongoose.connection.close())

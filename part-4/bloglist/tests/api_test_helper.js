@@ -16,11 +16,19 @@ const initialBlogs = [
   }
 ]
 
+const nonExistValidId = async () => {
+  const note = new Blog({ title: 'dsadsadsa', url: 'asdasdsad' })
+  await note.save()
+  await note.remove()
+
+  return note._id.toString()
+}
 const blogsInDbNow = async () => {
   return await Blog.find({})
 }
 
 module.exports = {
   blogsInDbNow,
-  initialBlogs
+  initialBlogs,
+  nonExistValidId
 }
