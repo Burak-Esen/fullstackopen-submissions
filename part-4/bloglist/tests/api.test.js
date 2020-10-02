@@ -27,4 +27,20 @@ test('is property is exist', async () => {
   expect(blogs[1].id).toBeDefined()
 })
 
+test('a valid blog can be added', async () => {
+  const newBlog = {
+    title:'Go To Statement Considered Harmful',
+    author:'Edsger W. Dijkstra',
+    url:'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html',
+    likes:5
+  }
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(200)
+    .expect('Content-Type', /application\/json/)
+  const blogsNow = await helper.blogsInDbNow()
+  expect(blogsNow).toHaveLength(helper.initialBlogs.length + 1)
+})
+
 afterAll(() => mongoose.connection.close())
