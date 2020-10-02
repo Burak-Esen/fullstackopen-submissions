@@ -53,4 +53,15 @@ test('likes is 0 as a default value', async () => {
   expect(savedBlog.likes).toBe(0)
 })
 
+test('creating unvalid blog', async () => {
+  const unvalidBlog ={
+    author:'me',
+    likes:100
+  }
+  await api
+    .post('/api/blogs')
+    .send(unvalidBlog)
+    .expect(400)
+})
+
 afterAll(() => mongoose.connection.close())
