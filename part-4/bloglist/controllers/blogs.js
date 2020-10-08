@@ -10,6 +10,15 @@ blogsRouter.get('/', async (request, response) => {
 })
 
 blogsRouter.get('/:id', async (request, response) => {
+  const decodedToken = jwt.verify(request.token, process.env.SECRET)
+  if(!request.token || !decodedToken.id) {
+    response.status(401).json({ error:'token missing or invalid' })
+  }
+  const user = await User.findById(decodedToken.id)
+  let blogs=user.blogs.map(blog=>blog.toString())
+  if(!blogs.includes(request.params.id)) {
+    response.status(403).json({ error:'Unauthorized attempt or blog is deleted' })
+  }
   const blog = await Blog.findById(request.params.id).populate('user')
   if(blog){
     response.json(blog.toJSON())
@@ -48,7 +57,7 @@ blogsRouter.delete('/:id', async (request, response) => {
   const user = await User.findById(decodedToken.id)
   let blogs=user.blogs.map(blog=>blog.toString())
   if(!blogs.includes(request.params.id)) {
-    response.status(403).json({ error:'Unauthorized attempt' })
+    response.status(403).json({ error:'Unauthorized attempt or the blog already deleted' })
   }else{
     const index = blogs.indexOf(request.params.id)
     blogs.splice(index, 1)
@@ -60,6 +69,15 @@ blogsRouter.delete('/:id', async (request, response) => {
 })
 
 blogsRouter.put('/:id', async (request, response) => {
+  const decodedToken = jwt.verify(request.token, process.env.SECRET)
+  if(!request.token || !decodedToken.id) {
+    response.status(401).json({ error:'token missing or invalid' })
+  }
+  const user = await User.findById(decodedToken.id)
+  let blogs=user.blogs.map(blog=>blog.toString())
+  if(!blogs.includes(request.params.id)) {
+    response.status(403).json({ error:'Unauthorized attempt or the blog already deleted' })
+  }
   const blog = {
     title:request.body.title,
     url:request.body.url,
