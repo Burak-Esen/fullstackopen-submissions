@@ -44,6 +44,7 @@ h2 {
 .body{
   background-color: whitesmoke;
   scroll-behavior: smooth;
+  margin-left:2rem;
 }
 
 div.error {
