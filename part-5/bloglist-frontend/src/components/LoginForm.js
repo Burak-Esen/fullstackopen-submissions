@@ -53,7 +53,7 @@ const LoginForm = (props) => {
     </form>
   :
     <div>
-      <p>{props.user.name} logged-in</p>
+      <span>{props.user.name} logged-in</span>
       <button onClick={logoutHandler}>Logout</button>
     </div>
   )
