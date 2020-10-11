@@ -1,23 +1,26 @@
 import React, { useState, useEffect } from 'react'
-import blogService from './services/blogs'
 import LoginForm from './components/LoginForm'
 import Blogs from './components/Blogs'
 import Notification from './components/Notification'
 import './App.css'
 
 const App = () => {
-  const [blogs, setBlogs] = useState([])
   const [user, setUser] = useState(null)
   const [errorMessage, setErrorMessage] = useState(null)
   const [isError, setIsError] = useState(false)
 
   useEffect(() => {
-    blogService.getAll().then(blogs =>
-      setBlogs( blogs )
-    )  
+    const loggedUser = JSON.parse(window.localStorage.getItem('loggedBloglistAppUser'))
+    if(loggedUser){
+      setUser(loggedUser)
+    }
   }, [])
   
-  const setErrorMessageHandler = (message, isAnError) => {
+  const getTokenFromWindow = () => {
+    return (JSON.parse(window.localStorage.getItem('loggedBloglistAppUser'))).token
+  }
+
+  const notificationHandler = (message, isAnError) => {
     setErrorMessage(message)
     setIsError(isAnError)
     setTimeout(() => {
@@ -31,13 +34,11 @@ const App = () => {
       <Notification message={errorMessage} isError={isError} />
       <LoginForm user={user}
         setUser={setUser}
-        setErrorMessageHandler={setErrorMessageHandler} 
-      />
+        notificationHandler={notificationHandler} />
 
       <Blogs user={user}
-        blogs={blogs}
-      />
-
+        getTokenFromWindow={getTokenFromWindow}
+        notificationHandler={notificationHandler} />
     </div>
   )
 }

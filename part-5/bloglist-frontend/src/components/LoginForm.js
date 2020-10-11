@@ -24,7 +24,7 @@ const LoginForm = (props) => {
       setUsername('')
       setPassword('')
     }catch(e){
-      props.setErrorMessageHandler('Wrong credentials', true)
+      props.notificationHandler('Wrong credentials', true)
       props.setUser(null)
     }
   }
