@@ -1,5 +1,6 @@
-import React from 'react'
+import React, { useState } from 'react'
 const Blog = ({ blog }) => {
+  const [detailsIsHidden, setDetailsIsHidden] = useState(true)
   const cardStyle = { 
     backgroundImage:`url(${blog.previewUrl})`,
     backgroundSize: 'contain',
@@ -18,13 +19,27 @@ const Blog = ({ blog }) => {
     flex:0,
     width:'100%'
   }
+  const titleStyle = {
+    marginBottom:5,
+    cursor:"pointer"
+  }
+  const detailDivStyle= {
+    textAlign:'left'
+  }
+
   return (
     <div className="column">
       <div style = {cardStyle} className="card">
         <div style = {textContainerStyle} >
-          <h3>{blog.title}</h3>
-          <p>{blog.author}</p>
-          <a href={blog.url} rel="noopener noreferrer" target="_blank" >Go to</a>
+          <h3 className="blogTitle" onClick={()=>setDetailsIsHidden(!detailsIsHidden)} style={titleStyle}>{blog.title}</h3>
+          {detailsIsHidden ? [] :
+          <div className="detailsContainer" style={detailDivStyle}>
+            <span>author: {blog.author}</span><br />
+            <span>Category: {blog.category}</span><br />
+            <span>likes: {blog.likes}</span> <button>Like</button><br />
+            <span>Url: {blog.url}</span>
+          </div>}
+          <a href={blog.url} rel="noopener noreferrer" target="_blank" >Go to Blog Page</a>
         </div>
       </div>
     </div>

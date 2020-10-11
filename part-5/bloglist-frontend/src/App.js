@@ -43,7 +43,9 @@ const App = () => {
       <Notification message={errorMessage} isError={isError} />
       <LoginForm user={user}
         setUser={setUser}
-        notificationHandler={notificationHandler} />
+        notificationHandler={notificationHandler}
+      />
+
       {user!==null ?
         <Togglable buttonLabel="New Blog" ref={noteFormRef} >
           <CreateBlogForm getTokenFromWindow={getTokenFromWindow}
@@ -51,6 +53,7 @@ const App = () => {
             setBlogs={setBlogs} />
         </Togglable> : []
       }
+      
       <Blogs user={user}
         blogs={blogs}
         setBlogs={setBlogs}
