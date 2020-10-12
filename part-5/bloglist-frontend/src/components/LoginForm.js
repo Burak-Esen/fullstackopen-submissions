@@ -12,20 +12,25 @@ const LoginForm = (props) => {
 
   const handleLogin = async (event) => {
     event.preventDefault()
-    try {
-      const userAttemptLogin = await loginService.login({
-        username:username, password:password
-      })
-      window.localStorage.setItem(
-        'loggedBloglistAppUser', JSON.stringify(userAttemptLogin) // profile in the sore as a string
-      )
-      const parsedUser = JSON.parse(JSON.stringify(userAttemptLogin))
-      props.setUser(parsedUser)
-      setUsername('')
-      setPassword('')
-    }catch(e){
-      props.notificationHandler('Wrong credentials', true)
-      props.setUser(null)
+    if(username==='' || password===''){
+      props.notificationHandler('Enter Username and Password.', true)
+      return null
+    }else{
+      try {
+        const userAttemptLogin = await loginService.login({
+          username:username, password:password
+        })
+        window.localStorage.setItem(
+          'loggedBloglistAppUser', JSON.stringify(userAttemptLogin) // profile in the sore as a string
+        )
+        const parsedUser = JSON.parse(JSON.stringify(userAttemptLogin))
+        props.setUser(parsedUser)
+        setUsername('')
+        setPassword('')
+      }catch(e){
+        props.notificationHandler('Wrong credentials', true)
+        props.setUser(null)
+      }
     }
   }
 

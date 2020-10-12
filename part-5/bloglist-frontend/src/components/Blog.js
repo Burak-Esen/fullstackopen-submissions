@@ -1,6 +1,9 @@
 import React, { useState } from 'react'
-const Blog = ({ blog }) => {
+import blogService from '../services/blogs'
+
+const Blog = ({ blog, getTokenFromWindow, setBlogs }) => {
   const [detailsIsHidden, setDetailsIsHidden] = useState(true)
+  const [likeBtnIsDisable, setLikeBtnIsDisable] = useState(false)
   const cardStyle = { 
     backgroundImage:`url(${blog.previewUrl})`,
     backgroundSize: 'contain',
@@ -27,6 +30,16 @@ const Blog = ({ blog }) => {
     textAlign:'left'
   }
 
+  const likeHandler = e => {
+    e.preventDefault()
+    blogService.update({...blog, likes:blog.likes+1}, getTokenFromWindow())
+    setBlogs(blogs=>{
+      blogs.find(blogObj => blogObj.id===blog.id).likes= blog.likes+1
+      return blogs
+    })
+    setLikeBtnIsDisable(true)
+  }
+
   return (
     <div className="column">
       <div style = {cardStyle} className="card">
@@ -36,7 +49,7 @@ const Blog = ({ blog }) => {
           <div className="detailsContainer" style={detailDivStyle}>
             <span>author: {blog.author}</span><br />
             <span>Category: {blog.category}</span><br />
-            <span>likes: {blog.likes}</span> <button>Like</button><br />
+            <span>likes: {blog.likes}</span> <button onClick={likeHandler} disabled={likeBtnIsDisable}>Like</button><br />
             <span>Url: {blog.url}</span>
           </div>}
           <a href={blog.url} rel="noopener noreferrer" target="_blank" >Go to Blog Page</a>
