@@ -2,23 +2,23 @@ import React, { useState } from 'react'
 import loginService from '../services/login'
 
 const LoginForm = (props) => {
-  const [username, setUsername] = useState('') 
+  const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
-  const logoutHandler = e => {
+  const logoutHandler = () => {
     window.localStorage.removeItem('loggedBloglistAppUser')
     props.setUser(null)
   }
 
   const handleLogin = async (event) => {
     event.preventDefault()
-    if(username==='' || password===''){
+    if (username === '' || password === '') {
       props.notificationHandler('Enter Username and Password.', true)
       return null
-    }else{
+    } else {
       try {
         const userAttemptLogin = await loginService.login({
-          username:username, password:password
+          username: username, password: password
         })
         window.localStorage.setItem(
           'loggedBloglistAppUser', JSON.stringify(userAttemptLogin) // profile in the sore as a string
@@ -27,7 +27,7 @@ const LoginForm = (props) => {
         props.setUser(parsedUser)
         setUsername('')
         setPassword('')
-      }catch(e){
+      } catch (e) {
         props.notificationHandler('Wrong credentials', true)
         props.setUser(null)
       }
@@ -38,7 +38,7 @@ const LoginForm = (props) => {
     <form onSubmit={handleLogin}>
       <div>
         username
-          <input
+        <input
           type="text"
           value={username}
           name="Username"
@@ -47,7 +47,7 @@ const LoginForm = (props) => {
       </div>
       <div>
         password
-          <input
+        <input
           type="password"
           value={password}
           name="Password"
@@ -56,7 +56,7 @@ const LoginForm = (props) => {
       </div>
       <button type="submit">login</button>
     </form>
-  :
+    :
     <div>
       <span>{props.user.name} logged-in</span>
       <button onClick={logoutHandler}>Logout</button>

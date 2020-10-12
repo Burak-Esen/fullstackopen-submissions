@@ -6,8 +6,8 @@ const Notification = ({ message, isError }) => {
   }
 
   return (
-    <div className={isError ? "error" : "notif"}>
-      <p style={{marginTop:"5px", marginBottom:"5px"}}> {message} </p>
+    <div className={isError ? 'error' : 'notif'}>
+      <p style={{ marginTop: '5px', marginBottom: '5px' }}> {message} </p>
     </div>
   )
 }

@@ -20,12 +20,12 @@ const App = () => {
       setUser(loggedUser)
     }
   }, [])
-  
+
   const getTokenFromWindow = () => {
     if(window.localStorage.getItem('loggedBloglistAppUser')) {
       return (JSON.parse(window.localStorage.getItem('loggedBloglistAppUser'))).token
     }else{
-     return null
+      return null
     }
   }
 
@@ -53,7 +53,7 @@ const App = () => {
             setBlogs={setBlogs} />
         </Togglable> : []
       }
-      
+
       <Blogs user={user}
         blogs={blogs}
         setBlogs={setBlogs}
