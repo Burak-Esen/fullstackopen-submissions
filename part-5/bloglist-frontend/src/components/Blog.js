@@ -40,6 +40,14 @@ const Blog = ({ blog, getTokenFromWindow, setBlogs }) => {
     setLikeBtnIsDisable(true)
   }
 
+  const deleteHandler = e => {
+    e.preventDefault()
+    if(window.confirm(`Blog: ${blog.title} will be erased parmanently. Is it OK?`)){
+      blogService.deleteBlog(blog.id, getTokenFromWindow())
+      setBlogs(prev => prev.filter(obj=>obj.id!==blog.id))
+    }
+  }
+
   return (
     <div className="column">
       <div style = {cardStyle} className="card">
@@ -50,7 +58,14 @@ const Blog = ({ blog, getTokenFromWindow, setBlogs }) => {
             <span>author: {blog.author}</span><br />
             <span>Category: {blog.category}</span><br />
             <span>likes: {blog.likes}</span> <button onClick={likeHandler} disabled={likeBtnIsDisable}>Like</button><br />
-            <span>Url: {blog.url}</span>
+            <span>Url: {blog.url}</span><br />
+            <span style={{cursor:'pointer',
+              backgroundColor:'red',
+              paddingLeft:'2px',
+              paddingRight:'2px',
+              textShadow:'none',
+              color:'white',
+              fontWeight:400}} onClick={deleteHandler}>Delete?</span>
           </div>}
           <a href={blog.url} rel="noopener noreferrer" target="_blank" >Go to Blog Page</a>
         </div>
