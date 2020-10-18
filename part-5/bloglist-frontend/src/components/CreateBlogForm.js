@@ -24,10 +24,10 @@ const CreateBlogForm = (props) => {
       .catch(e => props.notificationHandler(e.response.data['error'] || e.message, true))
   }
   return (
-    <form onSubmit={createBlogaHandler}><br />
-      title__: <input value={title} onChange={({ target }) => setTitle(target.value)} /><br />
-      author: <input value={author} onChange={({ target }) => setAuthor(target.value)} /><br />
-      url__ : <input value={url} onChange={({ target }) => setUrl(target.value)} /><br />
+    <form data-testid="blogForm" onSubmit={createBlogaHandler}><br />
+      title__: <input data-testid="testTitle" id="title" value={title} onChange={({ target }) => setTitle(target.value)} /><br />
+      author: <input data-testid="testAuthor" id="author" value={author} onChange={({ target }) => setAuthor(target.value)} /><br />
+      url__ : <input data-testid="testUrl" id="url" value={url} onChange={({ target }) => setUrl(target.value)} /><br />
       <input type="submit" value="Add Blog" />
     </form>
   )
