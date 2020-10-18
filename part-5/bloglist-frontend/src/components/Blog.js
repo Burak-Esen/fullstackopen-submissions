@@ -54,9 +54,9 @@ const Blog = ({ blog, getTokenFromWindow, setBlogs }) => {
       <div style={cardStyle} className="card">
         <div style={textContainerStyle} >
           <h3 className="blogTitle" onClick={() => setDetailsIsHidden(!detailsIsHidden)} style={titleStyle}>{blog.title}</h3>
+          <span><b>by:</b> {blog.author}</span><br />
           {detailsIsHidden ? [] :
             <div className="detailsContainer" style={detailDivStyle}>
-              <span>author: {blog.author}</span><br />
               <span>Category: {blog.category}</span><br />
               <span>likes: {blog.likes}</span> <button onClick={likeHandler} disabled={likeBtnIsDisable}>Like</button><br />
               <span>Url: {blog.url}</span><br />
