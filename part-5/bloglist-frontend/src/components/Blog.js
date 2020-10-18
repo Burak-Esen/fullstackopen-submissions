@@ -38,7 +38,7 @@ const Blog = ({ blog, getTokenFromWindow, setBlogs }) => {
       blogs.find(blogObj => blogObj.id === blog.id).likes = blog.likes + 1
       return blogs
     })
-    setLikeBtnIsDisable(true)
+    //setLikeBtnIsDisable(true)
   }
 
   const deleteHandler = e => {
