@@ -37,7 +37,7 @@ describe('Blog app', () => {
       cy.createUser({ username:'root', password:'root' })
     })
 
-    it('and the user can log in', () => {
+    it('the user can log in', () => {
       cy.get('input[name=Username]').type('root')
       cy.get('input[name=Password]').type('root')
       cy.get('button#login').click()
@@ -82,6 +82,33 @@ describe('Blog app', () => {
       cy.contains('likes:', { timeout: 15000 }).should('contain', 'likes: 1')
       cy.contains('Like').click()
       cy.contains('likes:', { timeout: 15000 }).should('contain', 'likes: 2')
+    })
+
+    it('user can delete a blog', () => {
+      cy.contains('New Blog').click()
+      cy.get('input#title').type('ReDos')
+      cy.get('input#author').type('wikipedia')
+      cy.get('input#url').type('https://en.wikipedia.org/wiki/ReDoS')
+      cy.contains('Add Blog').click()
+      cy.get('h3.blogTitle', { timeout: 10000 }).click()
+      cy.contains('Delete?').click()
+      cy.get('.column').should('not.contain', 'ReDos')
+    })
+
+    it('user can\'t delete another\'s blog', () => {
+      cy.contains('New Blog').click()
+      cy.get('input#title').type('ReDos')
+      cy.get('input#author').type('wikipedia')
+      cy.get('input#url').type('https://en.wikipedia.org/wiki/ReDoS')
+      cy.contains('Add Blog').click()
+      cy.get('#logout').click()
+      cy.createUser({ username:'anotherUser', password:'pass' })
+      cy.wait(5000)
+      cy.login({ username:'anotherUser', password:'pass' })
+      cy.contains('ReDos', { timeout: 15000 })
+      cy.get('h3.blogTitle').click()
+      cy.contains('Delete?').click()
+      cy.contains('Unauthorized activity')
     })
   })
 

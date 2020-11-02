@@ -59,7 +59,7 @@ blogsRouter.delete('/:id', async (request, response) => {
   const user = await User.findById(decodedToken.id)
   let blogs=user.blogs.map(blog => blog.toString())
   if(!blogs.includes(request.params.id)) {
-    response.status(403).json({ error:'Unauthorized attempt or the blog already deleted' })
+    return response.status(403).json({ error:'Unauthorized attempt or the blog already deleted' })
   }else{
     const index = blogs.indexOf(request.params.id)
     blogs.splice(index, 1)

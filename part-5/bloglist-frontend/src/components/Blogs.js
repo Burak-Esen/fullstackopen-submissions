@@ -23,6 +23,7 @@ const Blogs = (props) => {
           key={blog.id}
           blog={blog}
           setBlogs={props.setBlogs}
+          notificationHandler={props.notificationHandler}
         />)}
       </div>
       : []

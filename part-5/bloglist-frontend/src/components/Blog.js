@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import blogService from '../services/blogs'
 import PropTypes from 'prop-types'
 
-const Blog = ({ blog, getTokenFromWindow, setBlogs }) => {
+const Blog = ({ blog, getTokenFromWindow, setBlogs, notificationHandler }) => {
   const [detailsIsHidden, setDetailsIsHidden] = useState(true)
   // eslint-disable-next-line no-unused-vars
   const [likeBtnIsDisable, setLikeBtnIsDisable] = useState(false)
@@ -35,20 +35,25 @@ const Blog = ({ blog, getTokenFromWindow, setBlogs }) => {
   const likeHandler = e => {
     e.preventDefault()
     blogService.update({ ...blog, likes: blog.likes + 1 }, getTokenFromWindow())
-      .then(
+      .then(() => {
         setBlogs(blogs => {
           blogs.find(blogObj => blogObj.id === blog.id).likes = blog.likes + 1
           //setLikeBtnIsDisable(true)
           return blogs.concat([])
         })
-      )
+      })
   }
 
   const deleteHandler = e => {
     e.preventDefault()
     if (window.confirm(`Blog: ${blog.title} will be erased parmanently. Is it OK?`)) {
       blogService.deleteBlog(blog.id, getTokenFromWindow())
-      setBlogs(prev => prev.filter(obj => obj.id !== blog.id))
+        .then(() => {
+          setBlogs(prev => prev.filter(obj => obj.id !== blog.id))
+        })
+        .catch(() => {
+          notificationHandler('Unauthorized activity', true)
+        })
     }
   }
 

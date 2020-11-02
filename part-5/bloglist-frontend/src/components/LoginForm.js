@@ -59,7 +59,7 @@ const LoginForm = (props) => {
     :
     <div>
       <span>{props.user.name}({props.user.username}) logged-in</span>
-      <button onClick={logoutHandler}>Logout</button>
+      <button id="logout" onClick={logoutHandler}>Logout</button>
     </div>
   )
 }
