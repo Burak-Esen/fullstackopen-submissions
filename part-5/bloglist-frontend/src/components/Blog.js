@@ -4,6 +4,7 @@ import PropTypes from 'prop-types'
 
 const Blog = ({ blog, getTokenFromWindow, setBlogs }) => {
   const [detailsIsHidden, setDetailsIsHidden] = useState(true)
+  // eslint-disable-next-line no-unused-vars
   const [likeBtnIsDisable, setLikeBtnIsDisable] = useState(false)
   const cardStyle = {
     backgroundImage: `url(${blog.previewUrl})`,
