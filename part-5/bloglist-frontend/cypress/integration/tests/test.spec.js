@@ -67,8 +67,21 @@ describe('Blog app', () => {
       cy.get('input#author').type('wikipedia')
       cy.get('input#url').type('https://en.wikipedia.org/wiki/ReDoS')
       cy.contains('Add Blog').click()
-      cy.contains('ReDos')
+      cy.contains('ReDos', { timeout: 10000 })
       cy.contains('wikipedia')
+    })
+
+    it('user can like a blog', () => {
+      cy.contains('New Blog').click()
+      cy.get('input#title').type('ReDos')
+      cy.get('input#author').type('wikipedia')
+      cy.get('input#url').type('https://en.wikipedia.org/wiki/ReDoS')
+      cy.contains('Add Blog').click()
+      cy.get('h3.blogTitle', { timeout: 10000 }).click()
+      cy.contains('Like').click()
+      cy.contains('likes:', { timeout: 15000 }).should('contain', 'likes: 1')
+      cy.contains('Like').click()
+      cy.contains('likes:', { timeout: 15000 }).should('contain', 'likes: 2')
     })
   })
 

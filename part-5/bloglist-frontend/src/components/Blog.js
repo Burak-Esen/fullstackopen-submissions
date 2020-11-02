@@ -35,11 +35,13 @@ const Blog = ({ blog, getTokenFromWindow, setBlogs }) => {
   const likeHandler = e => {
     e.preventDefault()
     blogService.update({ ...blog, likes: blog.likes + 1 }, getTokenFromWindow())
-    setBlogs(blogs => {
-      blogs.find(blogObj => blogObj.id === blog.id).likes = blog.likes + 1
-      return blogs
-    })
-    //setLikeBtnIsDisable(true)
+      .then(
+        setBlogs(blogs => {
+          blogs.find(blogObj => blogObj.id === blog.id).likes = blog.likes + 1
+          //setLikeBtnIsDisable(true)
+          return blogs.concat([])
+        })
+      )
   }
 
   const deleteHandler = e => {
