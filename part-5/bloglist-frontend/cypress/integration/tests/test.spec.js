@@ -31,6 +31,7 @@ describe('Blog app', () => {
     cy.contains('password')
   })
 
+
   describe('when existing a user', () => {
     beforeEach(() => {
       cy.createUser({ username:'root', password:'root' })
@@ -52,4 +53,23 @@ describe('Blog app', () => {
         .should('have.css', 'color', 'rgb(110, 0, 0)')
     })
   })
+
+
+  describe('when logged in', () => {
+    beforeEach(() => {
+      cy.createUser({ username:'root', password:'root' })
+      cy.login({ username:'root', password:'root' })
+    })
+
+    it('A blog can be created', () => {
+      cy.contains('New Blog').click()
+      cy.get('input#title').type('ReDos')
+      cy.get('input#author').type('wikipedia')
+      cy.get('input#url').type('https://en.wikipedia.org/wiki/ReDoS')
+      cy.contains('Add Blog').click()
+      cy.contains('ReDos')
+      cy.contains('wikipedia')
+    })
+  })
+
 })
