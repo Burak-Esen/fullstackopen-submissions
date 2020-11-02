@@ -66,7 +66,7 @@ const Blog = ({ blog, getTokenFromWindow, setBlogs, notificationHandler }) => {
           {detailsIsHidden ? [] :
             <div className="detailsContainer" style={detailDivStyle}>
               <span>Category: {blog.category}</span><br />
-              <span>likes: {blog.likes}</span> <button onClick={likeHandler} disabled={likeBtnIsDisable}>Like</button><br />
+              <span className="likesSpan">likes: {blog.likes}</span> <button onClick={likeHandler} disabled={likeBtnIsDisable}>Like</button><br />
               <span>Url: {blog.url}</span><br />
               <span style={{
                 cursor: 'pointer',
