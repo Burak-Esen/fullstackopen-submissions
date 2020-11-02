@@ -54,11 +54,11 @@ const LoginForm = (props) => {
           onChange={({ target }) => setPassword(target.value)}
         />
       </div>
-      <button type="submit">login</button>
+      <button id='login' type="submit">login</button>
     </form>
     :
     <div>
-      <span>{props.user.name} logged-in</span>
+      <span>{props.user.name}({props.user.username}) logged-in</span>
       <button onClick={logoutHandler}>Logout</button>
     </div>
   )

@@ -20,14 +20,36 @@ Cypress.Commands.add('createUser', ({ username, password }) => {
   cy.visit('http://localhost:3000')
 })
 
-describe('Blog app', function() {
-  beforeEach(function() {
+describe('Blog app', () => {
+  beforeEach(() => {
     cy.request('POST', 'http://localhost:3001/api/testing/reset')
     cy.visit('http://localhost:3000')
   })
 
-  it('Login form is shown', function() {
+  it('Login form is shown', () => {
     cy.contains('username')
     cy.contains('password')
+  })
+
+  describe('when existing a user', () => {
+    beforeEach(() => {
+      cy.createUser({ username:'root', password:'root' })
+    })
+
+    it('and the user can log in', () => {
+      cy.get('input[name=Username]').type('root')
+      cy.get('input[name=Password]').type('root')
+      cy.get('button#login').click()
+      cy.contains('(root) logged-in')
+    })
+
+    it('and login fails with wrong password', () => {
+      cy.get('input[name=Username]').type('root')
+      cy.get('input[name=Password]').type('toor')
+      cy.get('button#login').click()
+      cy.contains('Wrong credentials')
+      cy.contains('Wrong credentials')
+        .should('have.css', 'color', 'rgb(110, 0, 0)')
+    })
   })
 })
