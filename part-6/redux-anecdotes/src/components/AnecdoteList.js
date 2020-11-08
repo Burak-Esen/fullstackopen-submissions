@@ -9,8 +9,9 @@ const AnecdoteList = () => {
 
   const vote = (id) => {
     dispatch(voteAnecdote(id))
-    const message="You voted " + anecdotes.find(anec=>anec.id===id).content
+    const message='You voted ' + anecdotes.find(anec=>anec.id===id).content
     dispatch(makeNotification(message))
+    setTimeout(()=>dispatch(makeNotification('')), 5000)
   }
 
   return anecdotes.map(anecdote =>
