@@ -15,3 +15,10 @@ export const createAnecdote = (content) => {
     }
   }
 }
+
+export const initializeAnecdotes = anecdotes => {
+  return {
+    type:'INITIALIZE',
+    data:anecdotes
+  }
+}
