@@ -1,34 +1,41 @@
 import React, { useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { connect } from 'react-redux'
 import { voteAnecdote, initializeAnecdotes } from '../reducers/anecdoteActions'
 import { makeNotification } from '../reducers/notificationReducer'
 
-const AnecdoteList = () => {
-  const dispatch = useDispatch()
-  
-  useEffect(() => {
-    dispatch(initializeAnecdotes())
-  }, [dispatch])
-
-  const anecdotes = useSelector(state => state.anecdotes.filter(anec => anec.content.toLowerCase().includes(state.filter.toLowerCase())))
-
-  const vote = id => {
-    let votedAnec = anecdotes.find(anec=>anec.id===id)
-    dispatch(voteAnecdote(votedAnec))
-    dispatch(makeNotification('You voted ' + votedAnec.content, 2))
+const AnecdoteList = (props) => {
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => { props.initializeAnecdotes() }, [])
+  const vote = anecdote => {
+    props.voteAnecdote(anecdote)
+    props.makeNotification('You voted ' + anecdote.content, 2)
   }
 
-  return anecdotes.map(anecdote =>
+  return props.anecdotes.map(anecdote =>
     <div style ={{marginBottom:'0.7rem', backgroundColor:'gainsboro'}} key={anecdote.id}>
       <div>
         {anecdote.content}
       </div>
       <div>
         has {anecdote.votes}
-        <button onClick={() => vote(anecdote.id)}>vote</button>
+        <button onClick={() => vote(anecdote)}>vote</button>
       </div>
     </div>
   )
 }
 
-export default AnecdoteList
+const mapStateToProps = state => {
+  return {
+    anecdotes: state.anecdotes.filter(anec => anec.content.toLowerCase().includes(state.filter.toLowerCase())),
+    filter:state.filter
+  }
+}
+const mapDispatchToProps = dispatch => {
+  return {
+    initializeAnecdotes: () => dispatch(initializeAnecdotes()),
+    voteAnecdote: anecdote => dispatch(voteAnecdote(anecdote)),
+    makeNotification: message => dispatch(makeNotification(message))
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(AnecdoteList)
