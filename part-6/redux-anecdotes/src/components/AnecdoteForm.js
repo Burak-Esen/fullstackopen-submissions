@@ -9,7 +9,7 @@ const AnecdoteForm = (props) => {
     event.persist()
     const content = event.target.newAnecdote.value
     props.createAnecdote(content)
-    props.makeNotification('You created a new anecdote: ' + content, 2)
+    props.makeNotification('You created a new anecdote: ' + content, 5, props.timeoutId)
     event.target.newAnecdote.value=''
   }
   return (
@@ -23,11 +23,16 @@ const AnecdoteForm = (props) => {
   )
 }
 
+const mapStateToProps = state => {
+  return {
+    timeoutId: state.notification.lastTimeoutId
+  }
+}
 const mapDispatchToProps = dispatch => {
   return {
     createAnecdote: content => dispatch(createAnecdote(content)),
-    makeNotification: (message, dur_sec) => dispatch(makeNotification(message, dur_sec))
+    makeNotification: (message, dur_sec, timeoutId) => dispatch(makeNotification(message, dur_sec, timeoutId)),
   }
 }
 
-export default connect(null, mapDispatchToProps)(AnecdoteForm)
+export default connect(mapStateToProps, mapDispatchToProps)(AnecdoteForm)

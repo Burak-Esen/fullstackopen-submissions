@@ -9,7 +9,7 @@ const AnecdoteList = (props) => {
 
   const vote = anecdote => {
     props.voteAnecdote(anecdote)
-    props.makeNotification('You voted ' + anecdote.content, 2)
+    props.makeNotification('You voted ' + anecdote.content, 5, props.timeoutId)
   }
 
   return props.anecdotes.map(anecdote =>
@@ -28,14 +28,15 @@ const AnecdoteList = (props) => {
 const mapStateToProps = state => {
   return {
     anecdotes: state.anecdotes.filter(anec => anec.content.toLowerCase().includes(state.filter.toLowerCase())),
-    filter:state.filter
+    filter:state.filter,
+    timeoutId:state.notification.lastTimeoutId
   }
 }
 const mapDispatchToProps = dispatch => {
   return {
     initializeAnecdotes: () => dispatch(initializeAnecdotes()),
     voteAnecdote: anecdote => dispatch(voteAnecdote(anecdote)),
-    makeNotification: (message, duration_sec) => dispatch(makeNotification(message,duration_sec))
+    makeNotification: (message, duration_sec, timeoutId) => dispatch(makeNotification(message,duration_sec, timeoutId))
   }
 }
 
