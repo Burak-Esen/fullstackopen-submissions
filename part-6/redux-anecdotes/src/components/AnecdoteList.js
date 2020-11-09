@@ -5,18 +5,17 @@ import { makeNotification } from '../reducers/notificationReducer'
 
 const AnecdoteList = () => {
   const dispatch = useDispatch()
+  
   useEffect(() => {
     dispatch(initializeAnecdotes())
   }, [dispatch])
 
   const anecdotes = useSelector(state => state.anecdotes.filter(anec => anec.content.toLowerCase().includes(state.filter.toLowerCase())))
 
-  const vote = async (id) => {
+  const vote = id => {
     let votedAnec = anecdotes.find(anec=>anec.id===id)
     dispatch(voteAnecdote(votedAnec))
-    const message='You voted ' + votedAnec.content
-    dispatch(makeNotification(message))
-    setTimeout(()=>dispatch(makeNotification('')), 5000)
+    dispatch(makeNotification('You voted ' + votedAnec.content, 2))
   }
 
   return anecdotes.map(anecdote =>

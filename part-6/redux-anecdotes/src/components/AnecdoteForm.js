@@ -11,9 +11,8 @@ const AnecdoteForm = () => {
     event.persist()
     const content = event.target.newAnecdote.value
     dispatch(createAnecdote(content))
+    dispatch(makeNotification('You created a new anecdote: ' + content, 2))
     event.target.newAnecdote.value=''
-    dispatch(makeNotification('You created a new anecdote: ' + content))
-    setTimeout(()=>dispatch(makeNotification('')), 5000)
   }
   return (
     <div style ={{marginBottom:'2rem'}}>
