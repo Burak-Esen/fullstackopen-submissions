@@ -34,6 +34,11 @@
       "content": "new one",
       "votes": 2,
       "id": "8HGjhHM"
+    },
+    {
+      "content": "new another",
+      "votes": 0,
+      "id": "xgEgwnY"
     }
   ]
 }
