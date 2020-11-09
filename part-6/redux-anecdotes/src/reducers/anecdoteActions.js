@@ -7,12 +7,10 @@ export const voteAnecdote = (id) => {
   }
 }
 
-export const createAnecdote = (content) => {
+export const createAnecdote = (anecdoteObj) => {
   return {
     type:'CREATE',
-    data:{
-      content:content
-    }
+    data:anecdoteObj
   }
 }
 
