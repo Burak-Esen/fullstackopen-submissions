@@ -6,6 +6,7 @@ import { makeNotification } from '../reducers/notificationReducer'
 const AnecdoteList = (props) => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => { props.initializeAnecdotes() }, [])
+
   const vote = anecdote => {
     props.voteAnecdote(anecdote)
     props.makeNotification('You voted ' + anecdote.content, 2)
@@ -34,7 +35,7 @@ const mapDispatchToProps = dispatch => {
   return {
     initializeAnecdotes: () => dispatch(initializeAnecdotes()),
     voteAnecdote: anecdote => dispatch(voteAnecdote(anecdote)),
-    makeNotification: message => dispatch(makeNotification(message))
+    makeNotification: (message, duration_sec) => dispatch(makeNotification(message,duration_sec))
   }
 }
 
