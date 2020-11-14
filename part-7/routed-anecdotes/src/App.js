@@ -23,32 +23,13 @@ const App = () => {
     }
   ])
 
-  const anecdoteById = (id) => anecdotes.find(a => a.id === id)
-
-  const vote = (id) => {
-    const anecdote = anecdoteById(id)
-
-    const voted = {
-      ...anecdote,
-      votes: anecdote.votes + 1
-    }
-
-    setAnecdotes(anecdotes.map(a => a.id === id ? voted : a))
-  }
-  //  <Router>
-  //     <h1>Software anecdotes</h1>
-  //     <Menu />
-  //     <Main anecdotes={anecdotes} />
-  //     <About />
-  //     <CreateNew addNew={addNew} />
-  //     <Footer />
-  //   </Router>
-
   return (
     <Router>
       <h1>Software Anecdotes</h1>
       <Menu />
-      <BaseRouter anecdotes={anecdotes} setAnecdotes={setAnecdotes}/>
+      <BaseRouter anecdotes={anecdotes}
+        setAnecdotes={setAnecdotes}
+      />
       <Footer />
     </Router>
   )
