@@ -20,6 +20,9 @@ const CreateNew = (props) => {
       votes: 0
     })
     props.makeNotification(`A new anecdote: ${content.value} created!`)
+  }
+
+  const resetFields = () => {
     content.refresh()
     author.refresh()
     info.refresh()
@@ -42,10 +45,10 @@ const CreateNew = (props) => {
           <input name='info' value={info.value} onChange={info.onChange} />
         </div>
         <button>create</button>
+        <button type="button" onClick={resetFields}>reset</button>
       </form>
     </div>
   )
-
 }
 
 export default CreateNew
