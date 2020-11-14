@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { BrowserRouter as Router} from 'react-router-dom'
 import Footer from './components/Footer'
 import Menu from './components/Menu'
+import Notification from './components/Notification'
 import BaseRouter from './Routes'
 
 const App = () => {
@@ -22,13 +23,18 @@ const App = () => {
       id: '2'
     }
   ])
-
+  const makeNotification = (message) => {
+    setNotification(message)
+    setTimeout(()=>setNotification(''), 10000)
+  }
   return (
     <Router>
       <h1>Software Anecdotes</h1>
       <Menu />
+      <Notification notification={notification} />
       <BaseRouter anecdotes={anecdotes}
         setAnecdotes={setAnecdotes}
+        makeNotification={makeNotification}
       />
       <Footer />
     </Router>

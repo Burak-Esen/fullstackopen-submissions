@@ -8,7 +8,7 @@ import Anecdote from './components/Anecdote'
 const BaseRoter = (props) => (
   <Switch>
     <Route exact path='/' component={AnecdotesList}>
-      <AnecdotesList anecdotes={props.anecdotes} setAnecotes={props.setAnecotes} />
+      <AnecdotesList anecdotes={props.anecdotes} setAnecdotes={props.setAnecdotes} />
     </Route>
 
     <Route exact path='/anecdotes/:id' component={Anecdote}>
@@ -16,9 +16,12 @@ const BaseRoter = (props) => (
     </Route>
 
     <Route exact path='/create' component={CreateNew}>
-      <CreateNew setAnecotes={props.setAnecotes} />
+      <CreateNew anecdotes={props.anecdotes}
+        setAnecdotes={props.setAnecdotes}
+        makeNotification={props.makeNotification}
+      />
     </Route>
-    
+
     <Route exact path='/about' component={About}>
       <About />
     </Route>

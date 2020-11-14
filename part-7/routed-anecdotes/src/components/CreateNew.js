@@ -12,12 +12,16 @@ const CreateNew = (props) => {
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    props.addNew({
+    addNew({
       content,
       author,
       info,
       votes: 0
     })
+    props.makeNotification(`A new anecdote: ${content} created!`)
+    setContent('')
+    setAuthor('')
+    setInfo('')
   }
 
   return (
