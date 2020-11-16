@@ -1,0 +1,46 @@
+{
+  "blogs": [
+    {
+      "title": "Production Best Practices: Security",
+      "user": 1,
+      "url": "https://expressjs.com/en/advanced/best-practice-security.html",
+      "id": 1
+    },
+    {
+      "title": "OWASP Top Ten",
+      "user": 2,
+      "url": "https://owasp.org/www-project-top-ten/",
+      "id": 2
+    },
+    {
+      "title": "REST COUNTRIES",
+      "user": 3,
+      "url": "https://restcountries.eu/",
+      "id": 3
+    }
+    
+  ],
+  "users": [
+    {
+      "name": "Matti Luukkainen",
+      "username":"mluukkai",
+      "secret": "asd123",
+      "blogs": [1],
+      "id": 1
+    },
+    {
+      "name": "Arto Hellas",
+      "username":"ahellas",
+      "secret": "asd123",
+      "blogs": [2],
+      "id": 2
+    },
+    {
+      "name": "Venla Ruuska",
+      "username":"vruuska",
+      "secret": "asd123",
+      "blogs": [3],
+      "id": 3
+    }
+  ]
+}
