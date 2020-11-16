@@ -3,7 +3,7 @@ import axios from 'axios'
 const baseUrl = 'http://127.0.0.1:3005/blogs'
 
 const create = async (blogObj, user) => { 
-  return await axios.post(baseUrl, blogObj)
+  return (await axios.post(baseUrl, blogObj)).data
   //console.log(asd)
   //await userService.update({...user, blogs:user.blogs.concat})
 }

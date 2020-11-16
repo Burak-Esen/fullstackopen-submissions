@@ -6,19 +6,19 @@ const create = async (userObj) => {
 }
 
 const getAll = async () => {
-  return (await axios.get(baseUrl)).data.map(u => {
+  return ((await axios.get(baseUrl)).data).map(u => {
     delete u.secret
     return u
   })
 }
 
-const update = async (userObj) => {
-  return await axios.put(baseUrl, userObj)
+const update = async (userObj,userId) => {
+  return await axios.put(`${baseUrl}/${userId}`, userObj)
 }
 
 const login = async (loginObj) => {
   const users = (await axios.get(baseUrl)).data
-  const user = users.find(u => u.username === loginObj.username)
+  const user = users.find(user => user.username === loginObj.username)
   if(user){
     if(user.secret===loginObj.secret){
       return user
@@ -27,10 +27,16 @@ const login = async (loginObj) => {
   return null
 }
 
+const findById = async (userId) => {
+  const users = (await axios.get(baseUrl)).data
+  return users.find(user=>user.id===userId)
+}
+
 // eslint-disable-next-line import/no-anonymous-default-export
 export default {
   create,
   getAll,
   update,
-  login
+  login,
+  findById
 }

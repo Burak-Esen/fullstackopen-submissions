@@ -17,29 +17,40 @@
       "user": 3,
       "url": "https://restcountries.eu/",
       "id": 3
+    },
+    {
+      "user": 2,
+      "title": "asd",
+      "url": "https://www.limousineinsanfrancisco.com",
+      "id": 4
     }
-    
   ],
   "users": [
     {
       "name": "Matti Luukkainen",
-      "username":"mluukkai",
-      "secret": "asd123",
-      "blogs": [1],
+      "username": "mluukkai",
+      "blogs": [
+        1
+      ],
       "id": 1
     },
     {
       "name": "Arto Hellas",
-      "username":"ahellas",
+      "username": "ahellas",
       "secret": "asd123",
-      "blogs": [2],
+      "blogs": [
+        2,
+        4
+      ],
       "id": 2
     },
     {
       "name": "Venla Ruuska",
-      "username":"vruuska",
+      "username": "vruuska",
       "secret": "asd123",
-      "blogs": [3],
+      "blogs": [
+        3
+      ],
       "id": 3
     }
   ]

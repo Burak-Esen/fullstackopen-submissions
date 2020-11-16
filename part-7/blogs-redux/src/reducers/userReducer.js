@@ -3,10 +3,13 @@ import userService from '../services/userService'
 const userReducer = (state={ user:null, users:[] }, action) => {
   switch(action.type){
     case 'LOG_IN':
-      state = { ...state, ...action.data }
+      state = { user:action.data.user, users:state.users }
       break
     case 'LOG_OUT':
-      state = {...state, ...action.data}
+      state = { user:null, users:state.users}
+      break
+    case 'GET_ALL_USER':
+      state = { user:state.user, users:action.data.users}
       break
     default:
       return state
@@ -26,24 +29,24 @@ export const login = loginObj =>{
   }
 }
 
-export const getAllUsers = () => {
-  return async dispatch => {
-    let users = await userService.getAll()
-    dispatch({
-      type:'GET_ALL',
-      data:{
-        users,
-      }
-    })
-  }
-}
-
 export const logout = () =>{
   return {
     type:'LOG_OUT',
     data:{
       user:null
     }
+  }
+}
+
+export const getAllUsers = () => {
+  return async dispatch => {
+    let users = await userService.getAll()
+    dispatch({
+      type:'GET_ALL_USER',
+      data:{
+        users,
+      }
+    })
   }
 }
 
