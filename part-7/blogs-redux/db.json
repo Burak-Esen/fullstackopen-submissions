@@ -3,26 +3,23 @@
     {
       "title": "Production Best Practices: Security",
       "user": 1,
+      "likes": 10,
       "url": "https://expressjs.com/en/advanced/best-practice-security.html",
       "id": 1
     },
     {
       "title": "OWASP Top Ten",
       "user": 2,
+      "likes": 5,
       "url": "https://owasp.org/www-project-top-ten/",
       "id": 2
     },
     {
       "title": "REST COUNTRIES",
       "user": 3,
+      "likes": 8,
       "url": "https://restcountries.eu/",
       "id": 3
-    },
-    {
-      "user": 2,
-      "title": "asd",
-      "url": "https://www.limousineinsanfrancisco.com",
-      "id": 4
     }
   ],
   "users": [
@@ -39,8 +36,7 @@
       "username": "ahellas",
       "secret": "asd123",
       "blogs": [
-        2,
-        4
+        2
       ],
       "id": 2
     },
