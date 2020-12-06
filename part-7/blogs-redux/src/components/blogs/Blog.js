@@ -29,6 +29,10 @@ const Blog = () => {
         <button onClick={deleteHandler} style={{backgroundColor:"red", color:"white"}}>Delete</button>
         : []
       }
+      <h3>Comments</h3>
+      {<ul>
+        {blog.comments.map((com, i)=><li key={i}>{com}</li>)}
+      </ul>}
     </div>
   )
 }

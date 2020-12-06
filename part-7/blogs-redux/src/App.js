@@ -1,15 +1,15 @@
 import React from 'react'
 import { BrowserRouter as Router } from 'react-router-dom'
 import BaseRouter from './routes'
-import Login from './components/Login'
 import Notification from './components/Notification'
+import Navigation from './components/Navigation'
 
 const App = () => {
   return (
     <Router>
       <div style={{fontFamily:"sans-serif"}}>
-        <h2>Blogs</h2>
-        <Login />
+        <Navigation />
+        <h2>Blog App</h2>
         <Notification />
         <BaseRouter />
       </div>
