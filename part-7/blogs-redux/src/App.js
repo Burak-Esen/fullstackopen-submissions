@@ -5,11 +5,12 @@ import Notification from './components/Notification'
 import Navigation from './components/Navigation'
 
 const App = () => {
+  const headerClasses="text-4xl ml-1"
   return (
     <Router>
-      <div style={{fontFamily:"sans-serif"}}>
+      <div className="bg-blue-100" style={{fontFamily:"sans-serif"}}>
         <Navigation />
-        <h2>Blog App</h2>
+        <h2 className={headerClasses}>Blog App</h2>
         <Notification />
         <BaseRouter />
       </div>

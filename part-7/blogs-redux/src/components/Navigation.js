@@ -6,6 +6,10 @@ import { makeNotification } from '../reducers/notificationReducer'
 import { logout } from '../reducers/userReducer'
 
 const Navigation = () => {
+  const NavDivClasses = "py-2 bg-green-600 text-white"
+  const linkClasses = "mx-2"
+  const logoutBtnClasses = "mx-2 bg-red-300 rounded-md px-1 text-black"
+  const loginTextClasses = "ml-4 font-extrabold"
   const [show,setShow]=useState(false)
   const user = useSelector(state=>state.user.user)
   const dispatch = useDispatch()
@@ -14,22 +18,19 @@ const Navigation = () => {
     dispatch(makeNotification('Logged Out'))
   }
   return (
-    <div style={{"background":"grey"}}>
-      <Link to="/">Main</Link>
-      <Link to="/blogs">Blogs</Link>
-      <Link to="/users">Users</Link>
+    <div className={NavDivClasses}>
+      <Link className={linkClasses} to="/">Main</Link>
+      <Link className={linkClasses} to="/blogs">Blogs</Link>
+      <Link className={linkClasses} to="/users">Users</Link>
       {user ?
         <div style={{'display':'inline-block'}}>
-          <span>{user.name} logged in</span>
-          <button onClick={logoutHandler}>Logout</button>
+          <span className={loginTextClasses}>{user.name} logged in</span>
+          <button className={logoutBtnClasses} onClick={logoutHandler}>Logout</button>
         </div>
         :show ?
-            <>
-              <Login />
-              <button onClick={()=>setShow(false)}>Cancel</button>
-            </>
+            <Login show={show} setShow={setShow} />
           :
-            <button onClick={()=>setShow(true)}>Login</button>
+            <button className={linkClasses} onClick={()=>setShow(true)}>Login</button>
       }
     </div>
   )
