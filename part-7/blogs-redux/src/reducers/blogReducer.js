@@ -14,6 +14,10 @@ const blogReducer = (state=[], action) => {
       state=state.filter(b=>b.id!==action.data.id)
       state=state.concat(action.data)
       break
+    case 'COMMENT_A_BLOG':
+      state=state.filter(b=>b.id!==action.data.id)
+      state=state.concat(action.data)
+      break
     default:
       return state
   }
@@ -48,6 +52,16 @@ export const likeBlog = blogObj => {
     const savedBlog = await blogService.update(blogObj)
     dispatch({
       type:'LIKE_A_BLOG',
+      data:savedBlog
+    })
+  }
+}
+
+export const commentABlog = blogObj => {
+  return async dispatch => {
+    const savedBlog = await blogService.update(blogObj)
+    dispatch({
+      type:'COMMENT_A_BLOG',
       data:savedBlog
     })
   }

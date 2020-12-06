@@ -5,7 +5,11 @@
       "user": 1,
       "likes": 12,
       "url": "https://expressjs.com/en/advanced/best-practice-security.html",
-      "comments":["comm1","comm2","comm3"],
+      "comments": [
+        "comm1",
+        "comm2",
+        "comm3"
+      ],
       "id": 1
     },
     {
@@ -13,7 +17,12 @@
       "user": 2,
       "likes": 5,
       "url": "https://owasp.org/www-project-top-ten/",
-      "comments":["comm1","comm2","comm3"],
+      "comments": [
+        "comm1",
+        "comm2",
+        "comm3",
+        "comm4"
+      ],
       "id": 2
     },
     {
@@ -21,7 +30,11 @@
       "user": 3,
       "likes": 8,
       "url": "https://restcountries.eu/",
-      "comments":["comm1","comm2","comm3"],
+      "comments": [
+        "comm1",
+        "comm2",
+        "comm3"
+      ],
       "id": 3
     }
   ],
