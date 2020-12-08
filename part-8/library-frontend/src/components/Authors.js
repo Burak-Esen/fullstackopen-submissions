@@ -1,9 +1,24 @@
-  
-import React from 'react'
+import React,{ useState } from 'react'
+import { useMutation } from '@apollo/client'
+import { SET_BIRTH, ALL_AUTHORS } from '../queries'
 
 const Authors = ({ show, authors}) => {
+  const [ setBirth ] = useMutation(SET_BIRTH, {
+    refetchQueries: [ { query: ALL_AUTHORS }]
+  })
+  const [ name, SetName ] = useState('')
+  const [ date, SetDate ] = useState('')
   if (!show) {
     return null
+  }
+
+  const setBirthHandler = e => {
+    e.preventDefault()
+    if(name!=='' && date!==''){
+      setBirth({ variables: { name, birth:Number.parseInt(date) }})
+      SetDate('')
+    }
+    
   }
 
   return (
@@ -29,7 +44,16 @@ const Authors = ({ show, authors}) => {
           )}
         </tbody>
       </table>
-
+    <h3>Set birth Year</h3>
+    <form onSubmit={setBirthHandler}>
+      name:<select name="authorName" onChange={({target})=>SetName(target.value)}>
+        {authors.map(a => <option key={a.name} value={a.name}>{a.name}</option>)}
+      </select>
+      <br/>
+      born :<input value={date} onChange={({target})=>SetDate(target.value)} type="number"/>
+      <br/>
+      <button type="submit">Set Birth</button>
+    </form>
     </div>
   )
 }
