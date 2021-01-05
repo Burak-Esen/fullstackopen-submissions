@@ -2,7 +2,7 @@ import React,{ useState } from 'react'
 import { useMutation } from '@apollo/client'
 import { SET_BIRTH, ALL_AUTHORS } from '../queries'
 
-const Authors = ({ show, authors}) => {
+const Authors = ({ show, authors, isAuth }) => {
   const [ setBirth ] = useMutation(SET_BIRTH, {
     refetchQueries: [ { query: ALL_AUTHORS }]
   })
@@ -27,13 +27,9 @@ const Authors = ({ show, authors}) => {
       <table>
         <tbody>
           <tr>
-            <th></th>
-            <th>
-              born
-            </th>
-            <th>
-              books
-            </th>
+            <th>author name</th>
+            <th>born</th>
+            <th>books</th>
           </tr>
           {authors.map(a =>
             <tr key={a.name}>
@@ -44,16 +40,22 @@ const Authors = ({ show, authors}) => {
           )}
         </tbody>
       </table>
-    <h3>Set birth Year</h3>
-    <form onSubmit={setBirthHandler}>
-      name:<select name="authorName" onChange={({target})=>SetName(target.value)}>
-        {authors.map(a => <option key={a.name} value={a.name}>{a.name}</option>)}
-      </select>
-      <br/>
-      born :<input value={date} onChange={({target})=>SetDate(target.value)} type="number"/>
-      <br/>
-      <button type="submit">Set Birth</button>
-    </form>
+    { isAuth
+        ? <div>
+            <h3>Set birth Year</h3>
+            <form onSubmit={setBirthHandler}>
+              name:<select name="authorName" onChange={({target})=>SetName(target.value)}>
+                <option value="">select an author</option>
+                {authors.map(a => <option key={a.name} value={a.name}>{a.name}</option>)}
+              </select>
+              <br/>
+              born :<input value={date} onChange={({target})=>SetDate(target.value)} type="number"/>
+              <br/>
+              <button type="submit">Set Birth</button>
+            </form>
+          </div>
+        : null
+    }
     </div>
   )
 }

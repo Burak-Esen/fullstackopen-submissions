@@ -1,15 +1,31 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import './app.css'
 import Authors from './components/Authors'
 import Books from './components/Books'
 import NewBook from './components/NewBook'
-import { useQuery } from '@apollo/client'
+import { useQuery, useApolloClient } from '@apollo/client'
 import { ALL_BOOKS, ALL_AUTHORS } from './queries'
+import LoginForm from './components/LoginForm'
 
 const App = () => {
   const [page, setPage] = useState('authors')
   const books = useQuery(ALL_BOOKS)
   const authors = useQuery(ALL_AUTHORS)
+  const [token, setToken] = useState(null)
+  const client = useApolloClient()
+
+  const logoutHandler = () => {
+    setToken(null)
+    localStorage.removeItem('libraryapp-user-token')
+    client.resetStore()
+  }
+
+  useEffect(() => {
+    const token = localStorage.getItem('libraryapp-user-token')
+    if (token){
+      setToken(token)
+    }
+  }, [])
 
   if (books.loading || authors.loading)  {
     return (
@@ -36,21 +52,29 @@ const App = () => {
       <div>
         <button onClick={() => setPage('authors')}>authors</button>
         <button onClick={() => setPage('books')}>books</button>
-        <button onClick={() => setPage('add')}>add book</button>
+        { token 
+          ? <><button onClick={() => setPage('add')}>add book</button>
+            <button onClick={logoutHandler}>Logout</button></>
+          : <button onClick={() => setPage('login')}>login</button>
+        }
       </div>
-
+      <div>
       <Authors authors={authors.data.allAuthors}
+        isAuth={Boolean(token)}
         show={page === 'authors'}
       />
-
       <Books books={books.data.allBooks}
         show={page === 'books'}
       />
-
-      <NewBook
-        show={page === 'add'}
-      />
-
+      { token
+        ? <NewBook show={page === 'add'} />
+        : <LoginForm
+            show={page === 'login'}
+            setToken={setToken}
+            setPage={setPage}
+          />
+      }
+      </div>
     </div>
   )
 }

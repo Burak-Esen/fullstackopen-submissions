@@ -12,3 +12,23 @@
 body{
   font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
+
+table {
+  border-collapse: collapse;
+  width: 50%;
+}
+
+table td, table th {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+table tr:nth-child(even){background-color: #f2f2f2;}
+
+table tr:hover {background-color: #ddd;}
+
+table th {
+  text-align: left;
+  background-color: #d39f5a;
+  color: white;
+}
