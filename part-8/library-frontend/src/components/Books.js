@@ -10,7 +10,7 @@ const Books = ({books, show}) => {
       b.genres.forEach(g => genres.includes(g) ? null : genres.push(g))
     })
     setGenres(genres)
-  }, [])
+  }, [books])
   if (!show) {
     return null
   }

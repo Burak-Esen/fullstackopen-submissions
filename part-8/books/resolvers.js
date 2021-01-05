@@ -8,9 +8,17 @@ require('dotenv').config()
 const resolvers = {
   Query: {
     bookCount: () => Book.collection.countDocuments(),
-    allBooks:(root, args)=>{
-      if(!args.authorName) return Book.find({}).populate('author')
-      return Book.find({ author : { $in: [ args.authorName ] } }).populate('author')
+    allBooks:async (root, args) => {
+      if(args.genre && args.author){
+        const author = await Author.findOne({name:args.author})
+        return Book.find({ author:author._id, genres:{ $elemMatch:{ $eq:args.genre } } }).populate('author')
+      }
+      else if (args.genre) return Book.find({ genres:{ $elemMatch:{ $eq:args.genre } } }).populate('author')
+      else if (args.author){
+        const author = await Author.findOne({name:args.author})
+        return Book.find({ author : author._id }).populate('author')
+      }
+      return Book.find({}).populate('author')
     },
     authorCount: () => Author.collection.countDocuments(),
     allAuthors:() => Author.find({}),
