@@ -32,7 +32,6 @@ const typeDefs = gql`
 
     authorCount : Int!
     allAuthors: [Author!]!
-
     me: User
   }
 

@@ -6,6 +6,7 @@ import NewBook from './components/NewBook'
 import { useQuery, useApolloClient } from '@apollo/client'
 import { ALL_BOOKS, ALL_AUTHORS } from './queries'
 import LoginForm from './components/LoginForm'
+import Recommend from './components/Recommend'
 
 const App = () => {
   const [page, setPage] = useState('authors')
@@ -53,8 +54,11 @@ const App = () => {
         <button style={{margin:"5px"}} onClick={() => setPage('authors')}>authors</button>
         <button style={{margin:"5px"}} onClick={() => setPage('books')}>books</button>
         { token 
-          ? <><button style={{margin:"5px"}} onClick={() => setPage('add')}>add book</button>
-            <button style={{margin:"5px"}} onClick={logoutHandler}>Logout</button></>
+          ? <>
+              <button style={{margin:"5px"}} onClick={() => setPage('recommend')}>Recommend</button>
+              <button style={{margin:"5px"}} onClick={() => setPage('add')}>add book</button>
+              <button style={{margin:"5px"}} onClick={logoutHandler}>Logout</button>
+            </>
           : <button style={{margin:"5px"}} onClick={() => setPage('login')}>login</button>
         }
       </div>
@@ -67,7 +71,10 @@ const App = () => {
         show={page === 'books'}
       />
       { token
-        ? <NewBook show={page === 'add'} />
+        ? <>
+            <Recommend show={page === 'recommend'} books={books.data.allBooks} />
+            <NewBook show={page === 'add'} />
+          </>
         : <LoginForm
             show={page === 'login'}
             setToken={setToken}
