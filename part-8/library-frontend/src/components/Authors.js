@@ -51,7 +51,7 @@ const Authors = ({ show, authors, isAuth }) => {
               <br/>
               born :<input value={date} onChange={({target})=>SetDate(target.value)} type="number"/>
               <br/>
-              <button type="submit">Set Birth</button>
+              <button style={{margin:"5px"}} type="submit">Set Birth</button>
             </form>
           </div>
         : null

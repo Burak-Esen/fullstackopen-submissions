@@ -50,12 +50,12 @@ const App = () => {
   return (
     <div>
       <div>
-        <button onClick={() => setPage('authors')}>authors</button>
-        <button onClick={() => setPage('books')}>books</button>
+        <button style={{margin:"5px"}} onClick={() => setPage('authors')}>authors</button>
+        <button style={{margin:"5px"}} onClick={() => setPage('books')}>books</button>
         { token 
-          ? <><button onClick={() => setPage('add')}>add book</button>
-            <button onClick={logoutHandler}>Logout</button></>
-          : <button onClick={() => setPage('login')}>login</button>
+          ? <><button style={{margin:"5px"}} onClick={() => setPage('add')}>add book</button>
+            <button style={{margin:"5px"}} onClick={logoutHandler}>Logout</button></>
+          : <button style={{margin:"5px"}} onClick={() => setPage('login')}>login</button>
         }
       </div>
       <div>
