@@ -7,6 +7,7 @@ import { useQuery, useApolloClient } from '@apollo/client'
 import { ALL_BOOKS, ALL_AUTHORS } from './queries'
 import LoginForm from './components/LoginForm'
 import Recommend from './components/Recommend'
+import { ME } from './queries'
 
 const App = () => {
   const [page, setPage] = useState('authors')
@@ -14,6 +15,7 @@ const App = () => {
   const authors = useQuery(ALL_AUTHORS)
   const [token, setToken] = useState(null)
   const client = useApolloClient()
+  const me = useQuery(ME)
 
   const logoutHandler = () => {
     setToken(null)
@@ -28,7 +30,7 @@ const App = () => {
     }
   }, [])
 
-  if (books.loading || authors.loading)  {
+  if (books.loading || authors.loading || me.loading)  {
     return (
       <div id="loading">
         <svg x="0px" y="0px" viewBox="0 0 100 100" enableBackground="new 0 0 0 0" space="preserve" >
@@ -72,8 +74,8 @@ const App = () => {
       />
       { token
         ? <>
-            <Recommend show={page === 'recommend'} books={books.data.allBooks} />
-            <NewBook show={page === 'add'} />
+            <Recommend show={page === 'recommend'} me={me.data.me} />
+            <NewBook show={page === 'add'} me={me.data.me} />
           </>
         : <LoginForm
             show={page === 'login'}
