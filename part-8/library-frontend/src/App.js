@@ -24,11 +24,11 @@ const App = () => {
   }
 
   useEffect(() => {
-    const token = localStorage.getItem('libraryapp-user-token')
-    if (token){
-      setToken(token)
+    const tok = localStorage.getItem('libraryapp-user-token')
+    if (tok){
+      setToken(tok)
     }
-  }, [])
+  }, [token])
 
   if (books.loading || authors.loading || me.loading)  {
     return (

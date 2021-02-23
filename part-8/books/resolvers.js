@@ -1,9 +1,11 @@
+require('dotenv').config()
 const { UserInputError, AuthenticationError } = require('apollo-server')
 const Book = require('./models/Book')
 const Author = require('./models/Author')
 const User = require('./models/User')
 const jwt = require('jsonwebtoken')
-require('dotenv').config()
+const { PubSub } = require('apollo-server')
+const pubsub = new PubSub()
 
 const resolvers = {
   Query: {
@@ -22,7 +24,10 @@ const resolvers = {
     },
     authorCount: () => Author.collection.countDocuments(),
     allAuthors:() => Author.find({}),
-    me: (root, args, { currentUser }) => currentUser
+    me: (root, args, { currentUser }) => {
+      console.log(currentUser)
+      return currentUser
+    }
   },
   Mutation: {
     addBook: async (root, args, { currentUser })=>{
@@ -67,6 +72,7 @@ const resolvers = {
           invalidArgs: args,
         })
       }
+      pubsub.publish('BOOK_ADDED', { bookAdded: newBook })
       return newBook
     },
     editAuthor:async (root, args, { currentUser }) => {
@@ -100,6 +106,11 @@ const resolvers = {
         id: user._id
       }
       return { value: jwt.sign(userForToken, process.env.SECRET) }
+    }
+  },
+  Subscription: {
+    bookAdded: {
+      subscribe: () => pubsub.asyncIterator(['BOOK_ADDED'])
     }
   }
 }
