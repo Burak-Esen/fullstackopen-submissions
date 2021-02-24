@@ -15,6 +15,19 @@ const descriptions = [
   'excellent'
 ]
 
+const parseArgs = (args: Array<string>) => {
+  if (args.length < 4) throw new Error('Not enough arguments');
+  const hourValues = args.slice(3).map(v => Number(v))
+  if (!isNaN(Number(args[2])) && hourValues.every(v => !isNaN(v))) {
+    return {
+      target: Number(args[2]),
+      hours: hourValues
+    }
+  } else {
+    throw new Error('Provided values were not numbers!');
+  }
+}
+
 const calculateExercises = (hours:number[], target:number) : results => {
   const average = hours.reduce((a,b)=>a+b)/hours.length
   const result = {
@@ -29,4 +42,9 @@ const calculateExercises = (hours:number[], target:number) : results => {
   return result
 }
 
-console.log(calculateExercises([3, 0, 2, 4.5, 0, 3, 1], 2))
+try {
+  const { hours, target } = parseArgs(process.argv)
+  console.log(calculateExercises(hours, target))
+} catch (e) {
+  console.log('Something is wrong. ' + e.message)
+}
