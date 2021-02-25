@@ -19,17 +19,19 @@ const descriptions = [
 const parseArgs = (args: Array<string>) => {
   if (args.length < 4) throw new Error('Not enough arguments');
   const hourValues = args.slice(3).map(v => Number(v));
-  if (!isNaN(Number(args[2])) && hourValues.every(v => !isNaN(v))) {
-    return {
-      target: Number(args[2]),
-      hours: hourValues
-    };
+  const target = Number(args[2]);
+  return checkArgs(hourValues, target);
+};
+
+export const checkArgs = (hours:number[], target:number):{ hours:number[], target:number } => {
+  if (!isNaN(target) && hours.every(v => !isNaN(v))) {
+    return { target, hours };
   } else {
     throw new Error('Provided values were not numbers!');
   }
 };
 
-const calculateExercises = (hours:number[], target:number) : results => {
+export const calculateExercises = (hours:number[], target:number) : results => {
   const average = hours.reduce((a,b)=>a+b)/hours.length;
   const result = {
     periodLength:hours.length,
