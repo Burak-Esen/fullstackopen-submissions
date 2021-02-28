@@ -1,16 +1,18 @@
-export interface diagnose {
+export interface Diagnose {
   code:string
   name:string,
   latin?:string
 }
 
-type gender = 'male' | 'female';
+type Gender = 'male' | 'female';
 
-export interface patient {
+export interface Patient {
   id:string
   name:string
   dateOfBirth: "1986-07-09",
   ssn:string
-  gender:gender
+  gender:Gender
   occupation:string
 }
+
+export type nonSsnPatient = Omit<Patient, 'ssn'>;
