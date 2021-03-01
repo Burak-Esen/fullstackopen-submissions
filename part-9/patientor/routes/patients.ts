@@ -1,21 +1,21 @@
 import express from 'express';
 const router = express.Router();
-import patientsData from '../data/patients.json';
-import {nonSsnPatient, Patient} from '../types';
-
-const getPatients = (data:Patient[]): nonSsnPatient[] => {
-  return data.map( el => ({
-      dateOfBirth:el.dateOfBirth,
-      gender:el.gender,
-      id:el.id,
-      name:el.name,
-      occupation:el.occupation
-    })
-  );
-};
+import patientService from '../services/patientService';
+import { toNewPatientEntry } from '../utils/utils';
 
 router.get('/', (_req, res) => {
-  res.json(getPatients(patientsData as Patient[]));
+  res.json(patientService.getSafePatients());
+});
+
+router.post('/', (req, res) => {
+  try {
+    const NewPatient = toNewPatientEntry(req.body);
+    const addedOne = patientService.addPatient(NewPatient);
+    res.json(addedOne);
+  } catch (e) {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    res.status(400).send(e.message);
+  }
 });
 
 export default router;
