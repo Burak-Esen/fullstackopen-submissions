@@ -7,6 +7,14 @@ router.get('/', (_req, res) => {
   res.json(patientService.getSafePatients());
 });
 
+router.get('/:id',(req, res) => {
+  const patient = patientService.getAPatient(req.params.id);
+  if (patient){
+    res.json(patient).end();
+  } else {
+    res.status(404).json({ error:"Patient not found" });
+  }
+});
 router.post('/', (req, res) => {
   try {
     const NewPatient = toNewPatientEntry(req.body);

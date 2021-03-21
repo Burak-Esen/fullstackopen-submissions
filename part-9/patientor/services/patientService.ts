@@ -2,6 +2,8 @@ import { Patient, NewPatient, nonSsnPatient } from '../types';
 import {v1 as uuid} from 'uuid';
 import patientsData from '../data/patients.json';
 
+const allPatients:Patient[] = patientsData as Patient[];
+
 const getSafePatients = (): nonSsnPatient[] => {
   return allPatients.map( el => ({
       dateOfBirth:el.dateOfBirth,
@@ -12,8 +14,15 @@ const getSafePatients = (): nonSsnPatient[] => {
     })
   );
 };
-const allPatients:Patient[] = patientsData as Patient[];
 
+const getAPatient = (id: string): Patient | undefined => {
+  const patient = allPatients.find(el => el.id === id);
+  if (patient) {
+    //patient?.entries.forEach(code => )
+    patient.entries = [];
+  }
+  return patient;
+};
 
 const addPatient = (obj:NewPatient): Patient => {
   const newP = {
@@ -30,5 +39,6 @@ const addPatient = (obj:NewPatient): Patient => {
 
 export default {
   getSafePatients,
-  addPatient
+  addPatient,
+  getAPatient
 };
