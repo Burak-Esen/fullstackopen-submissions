@@ -1,7 +1,7 @@
 import React from 'react';
 import { useStateValue } from "../state";
 import { Segment, Divider, Icon } from 'semantic-ui-react';
-import { Entry } from '../types';
+import { Entry, Diagnosis } from '../types';
 import { fetchPatient } from '../services';
 
 interface Props {
@@ -32,8 +32,14 @@ const PatientDetails = ({ id }: Props) => {
       <Segment size="large">Entries:</Segment>
       {patient?.entries && patient.entries.map((entry: Entry, i: number) => (
         <Segment.Group key={ i }>
-          <Segment size="tiny" >{ entry.type }</Segment>
-          <Segment size="tiny" >{ entry.specialist }</Segment>
+          <Segment>{ entry.date } -- { entry.description }</Segment>
+          <Segment size="tiny">
+            <ul> <b>Diagnosis Code</b>
+              { entry.diagnosisCodes && entry.diagnosisCodes.map((code: Diagnosis['code'], i: number) => (
+                <li key={i} >{ code }</li>
+              ))}
+            </ul>
+          </Segment>
           <Segment size="tiny" >{ entry.date }</Segment>
           <Divider/>
         </Segment.Group>
