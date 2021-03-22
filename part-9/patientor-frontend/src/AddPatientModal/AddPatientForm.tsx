@@ -84,12 +84,12 @@ export const AddPatientForm: React.FC<Props> = ({ onSubmit, onCancel }) => {
               options={genderOptions}
             />
             <Grid>
-              <Grid.Column floated="left" width={5}>
+              <Grid.Column floated="left" width={3}>
                 <Button type="button" onClick={onCancel} color="red">
                   Cancel
                 </Button>
               </Grid.Column>
-              <Grid.Column floated="right" width={5}>
+              <Grid.Column floated="right" width={3}>
                 <Button
                   type="submit"
                   floated="right"

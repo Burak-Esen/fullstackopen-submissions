@@ -10,6 +10,14 @@ export enum Gender {
   Other = "other"
 }
 
+
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface Entry {
+  code: string;
+  name: string;
+  latin: string;
+}
+
 export interface Patient {
   id: string;
   name: string;
@@ -17,4 +25,5 @@ export interface Patient {
   gender: Gender;
   ssn?: string;
   dateOfBirth?: string;
+  entries?: Array<Entry>;
 }
