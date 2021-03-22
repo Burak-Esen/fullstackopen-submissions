@@ -1,15 +1,16 @@
 import React from 'react';
 import { useStateValue } from "../state";
-import { Segment, Divider, Icon } from 'semantic-ui-react';
-import { Entry, Diagnosis } from '../types';
+import { Segment, Header, Grid } from 'semantic-ui-react';
+import { Entry } from '../types';
 import { fetchPatient } from '../services';
+import EntryDetails from './EntryDetails';
 
 interface Props {
   id: string;
 }
 
 const PatientDetails = ({ id }: Props) => {
-  const [{ patient, diagnoses }, dispatch] = useStateValue();
+  const [{ patient }, dispatch] = useStateValue();
   React.useEffect(() => {
       try {
         fetchPatient(dispatch, id);
@@ -18,35 +19,25 @@ const PatientDetails = ({ id }: Props) => {
       }
   }, [dispatch, id]);
   return (
-    <Segment.Group>
-      <Segment>
-        Name: { patient?.name } - 
-        { patient?.gender === 'male' 
-          ? <Icon name="mars" size="large" />
-          : <Icon name="venus" size="large" />
-        }
-      </Segment>
-      <Segment size="large">Occupation: { patient?.occupation }</Segment>
-      <Segment size="large">Birth Date: { patient?.dateOfBirth }</Segment>
-      <Segment size="large">SSN: { patient?.ssn }</Segment>
-      <Segment size="large">Entries:</Segment>
-      {patient?.entries && patient.entries.map((entry: Entry, i: number) => (
-        <Segment.Group key={ i }>
-          <Segment>{ entry.date } -- { entry.description }</Segment>
-          { entry.diagnosisCodes && entry.diagnosisCodes.length ?
-            <Segment size="tiny">
-              <ul> <b>Diagnosis Code - Description</b>
-                {
-                  entry.diagnosisCodes.map((code: Diagnosis['code'], i: number) => (
-                    <li key={i} >{ code } -- {diagnoses[code].name}</li>
-                  ))
-                }
-              </ul>
-            </Segment> : null
-          }
-          <Divider/>
-        </Segment.Group>
-      ))}
+    <Segment.Group style={{paddingBottom:"1rem"}} >
+      <Grid padded>
+          <Grid.Column floated="left"  >
+            <Header as='h3' content={ patient?.name }
+              dividing={true}
+              icon={patient?.gender === 'male' ? "mars" : "venus" }
+            />
+          </Grid.Column>
+      </Grid>
+      <p style={{ marginLeft:'1rem' }}>Occupation: { patient?.occupation }</p>
+      <p style={{ marginLeft:'1rem' }}>SSN: { patient?.ssn }</p>
+      { patient?.entries && patient.entries.length ?
+        <>
+          <Header style={{ marginLeft:"1rem" }} as="h4" content="Entries" />
+          { patient.entries.map((entry: Entry, i: number) => (
+            <EntryDetails key={i} entry={entry} />
+          ))}
+        </> : null
+      }
     </Segment.Group>
   );
 };
