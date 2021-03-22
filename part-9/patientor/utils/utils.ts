@@ -9,7 +9,8 @@ export const toNewPatientEntry = (obj:any): NewPatient => {
     dateOfBirth:parseDate(obj.dateOfBirth),
     gender:parseGender(obj.gender),
     occupation:parseText(obj.occupation),
-    ssn:parseText(obj.ssn)
+    ssn:parseText(obj.ssn),
+    entries: []
   };
   return newEntry;
 };

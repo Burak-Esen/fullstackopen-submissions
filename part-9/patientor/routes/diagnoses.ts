@@ -1,12 +1,12 @@
 import express from 'express';
 const router = express.Router();
 import diagnoseData from '../data/diagnoses.json';
-import {Diagnose} from '../types';
+import {Diagnosis} from '../types';
 
-const diagnoses = diagnoseData as Diagnose[];
+const diagnosis = diagnoseData as Diagnosis[];
 
 router.get('/', (_req, res) => {
-  res.json(diagnoses);
+  res.json(diagnosis);
 });
 
 export default router;

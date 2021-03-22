@@ -1,8 +1,8 @@
 import { Patient, NewPatient, nonSsnPatient } from '../types';
 import {v1 as uuid} from 'uuid';
-import patientsData from '../data/patients.json';
+import patientsData from '../data/patients';
 
-const allPatients:Patient[] = patientsData as Patient[];
+const allPatients:Patient[] = patientsData;
 
 const getSafePatients = (): nonSsnPatient[] => {
   return allPatients.map( el => ({
@@ -17,10 +17,6 @@ const getSafePatients = (): nonSsnPatient[] => {
 
 const getAPatient = (id: string): Patient | undefined => {
   const patient = allPatients.find(el => el.id === id);
-  if (patient) {
-    //patient?.entries.forEach(code => )
-    patient.entries = [];
-  }
   return patient;
 };
 

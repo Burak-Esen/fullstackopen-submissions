@@ -1,10 +1,8 @@
 import React from 'react';
-import { Patient } from "../types";
 import { useStateValue } from "../state";
-import axios from 'axios';
-import { apiBaseUrl } from "../constants";
 import { Segment, Divider, Icon } from 'semantic-ui-react';
 import { Entry } from '../types';
+import { fetchPatient } from '../services';
 
 interface Props {
   id: string;
@@ -13,17 +11,11 @@ interface Props {
 const PatientDetails = ({ id }: Props) => {
   const [{ patient }, dispatch] = useStateValue();
   React.useEffect(() => {
-    const fetchPatient = async () => {
       try {
-        const { data: patientFromApi } = await axios.get<Patient>(
-          `${apiBaseUrl}/patients/${id}`
-        );
-        dispatch({ type: "GET_A_PATIENT", payload: patientFromApi });
+        fetchPatient(dispatch, id);
       } catch (e) {
         console.error(e);
       }
-    };
-    fetchPatient();
   }, [dispatch, id]);
   return (
     <Segment.Group>
@@ -34,15 +26,15 @@ const PatientDetails = ({ id }: Props) => {
           : <Icon name="venus" size="large" />
         }
       </Segment>
-      <Segment>Occupation: { patient?.occupation }</Segment>
-      <Segment>Birth Date: { patient?.dateOfBirth }</Segment>
-      <Segment>SSN: { patient?.ssn }</Segment>
-      <Segment>Entries:</Segment>
+      <Segment size="large">Occupation: { patient?.occupation }</Segment>
+      <Segment size="large">Birth Date: { patient?.dateOfBirth }</Segment>
+      <Segment size="large">SSN: { patient?.ssn }</Segment>
+      <Segment size="large">Entries:</Segment>
       {patient?.entries && patient.entries.map((entry: Entry, i: number) => (
         <Segment.Group key={ i }>
-          <Segment>{ entry.code }</Segment>
-          <Segment>{ entry.latin }</Segment>
-          <Segment>{ entry.name }</Segment>
+          <Segment size="tiny" >{ entry.type }</Segment>
+          <Segment size="tiny" >{ entry.specialist }</Segment>
+          <Segment size="tiny" >{ entry.date }</Segment>
           <Divider/>
         </Segment.Group>
       ))}

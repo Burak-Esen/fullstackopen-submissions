@@ -1,14 +1,13 @@
 import React from "react";
-import axios from "axios";
 import { Container, Table, Button } from "semantic-ui-react";
 
 import { PatientFormValues } from "../AddPatientModal/AddPatientForm";
 import AddPatientModal from "../AddPatientModal";
 import { Patient } from "../types";
-import { apiBaseUrl } from "../constants";
 import HealthRatingBar from "../components/HealthRatingBar";
 import { useStateValue } from "../state";
 import { Link } from "react-router-dom";
+import { submitNewPatient } from '../services';
 
 const PatientListPage: React.FC = () => {
   const [{ patients }, dispatch] = useStateValue();
@@ -20,14 +19,9 @@ const PatientListPage: React.FC = () => {
     setError(undefined);
   };
 
-  const submitNewPatient = async (values: PatientFormValues) => {
+  const submitHandler = (values: PatientFormValues) => {
     try {
-      const { data: newPatient } = await axios.post<Patient>(
-        `${apiBaseUrl}/patients`,
-        values
-      );
-      dispatch({ type: "ADD_PATIENT", payload: newPatient });
-      closeModal();
+      submitNewPatient(values,dispatch,closeModal);
     } catch (e) {
       console.error(e.response.data);
       setError(e.response.data.error);
@@ -66,7 +60,7 @@ const PatientListPage: React.FC = () => {
       </Table>
       <AddPatientModal
         modalOpen={modalOpen}
-        onSubmit={submitNewPatient}
+        onSubmit={submitHandler}
         error={error}
         onClose={closeModal}
       />
