@@ -1,17 +1,17 @@
-import React from "react";
+import React, { useEffect, FC } from "react";
 import axios from "axios";
 import { BrowserRouter as Router, Route, Link, Switch } from "react-router-dom";
 import { Button, Divider, Header, Container } from "semantic-ui-react";
-
+import PatientModal from "./PatientModal";
 import { apiBaseUrl } from "./constants";
 import { useStateValue } from "./state";
 import { Patient } from "./types";
 
 import PatientListPage from "./PatientListPage";
 
-const App: React.FC = () => {
+const App: FC = () => {
   const [, dispatch] = useStateValue();
-  React.useEffect(() => {
+  useEffect(() => {
     axios.get<void>(`${apiBaseUrl}/ping`);
 
     const fetchPatientList = async () => {
@@ -37,7 +37,12 @@ const App: React.FC = () => {
           </Button>
           <Divider hidden />
           <Switch>
-            <Route path="/" render={() => <PatientListPage />} />
+            <Route exact path="/">
+              <PatientListPage />
+            </Route>
+            <Route exact path="/patients/:id">
+              <PatientModal />
+            </Route>
           </Switch>
         </Container>
       </Router>

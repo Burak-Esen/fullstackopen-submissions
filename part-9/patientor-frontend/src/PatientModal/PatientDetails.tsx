@@ -3,7 +3,7 @@ import { Patient } from "../types";
 import { useStateValue } from "../state";
 import axios from 'axios';
 import { apiBaseUrl } from "../constants";
-import { Segment, Divider } from 'semantic-ui-react';
+import { Segment, Divider, Icon } from 'semantic-ui-react';
 import { Entry } from '../types';
 
 interface Props {
@@ -27,17 +27,22 @@ const PatientDetails = ({ id }: Props) => {
   }, [dispatch, id]);
   return (
     <Segment.Group>
-      <Segment>Name: {patient?.name}</Segment>
-      <Segment>Occupation: {patient?.occupation}</Segment>
-      <Segment>Birth Date: {patient?.dateOfBirth}</Segment>
-      <Segment>Gender: {patient?.gender}</Segment>
-      <Segment>SSN: {patient?.ssn}</Segment>
+      <Segment>
+        Name: { patient?.name } - 
+        { patient?.gender === 'male' 
+          ? <Icon name="mars" size="large" />
+          : <Icon name="venus" size="large" />
+        }
+      </Segment>
+      <Segment>Occupation: { patient?.occupation }</Segment>
+      <Segment>Birth Date: { patient?.dateOfBirth }</Segment>
+      <Segment>SSN: { patient?.ssn }</Segment>
       <Segment>Entries:</Segment>
       {patient?.entries && patient.entries.map((entry: Entry, i: number) => (
-        <Segment.Group key={i}>
-          <Segment>{entry.code}</Segment>
-          <Segment>{entry.latin}</Segment>
-          <Segment>{entry.name}</Segment>
+        <Segment.Group key={ i }>
+          <Segment>{ entry.code }</Segment>
+          <Segment>{ entry.latin }</Segment>
+          <Segment>{ entry.name }</Segment>
           <Divider/>
         </Segment.Group>
       ))}

@@ -4,32 +4,20 @@ import { Container, Table, Button } from "semantic-ui-react";
 
 import { PatientFormValues } from "../AddPatientModal/AddPatientForm";
 import AddPatientModal from "../AddPatientModal";
-import PatientModal from "../PatientModal";
 import { Patient } from "../types";
 import { apiBaseUrl } from "../constants";
 import HealthRatingBar from "../components/HealthRatingBar";
 import { useStateValue } from "../state";
+import { Link } from "react-router-dom";
 
 const PatientListPage: React.FC = () => {
   const [{ patients }, dispatch] = useStateValue();
   const [modalOpen, setModalOpen] = React.useState<boolean>(false);
-  const [patientModalOpenList, setPatientModalOpenList] = React.useState<boolean[]>(
-    new Array(Object.keys(patients).length).fill(false)
-  );
   const [error, setError] = React.useState<string | undefined>();
   const openModal = (): void => setModalOpen(true);
-  const openPatientModal = (index: number): void => {
-    setPatientModalOpenList(old => {
-      old[index] = true;
-      return old.concat();
-    });
-  };
   const closeModal = (): void => {
     setModalOpen(false);
     setError(undefined);
-  };
-  const closePatientModal = (): void => {
-    setPatientModalOpenList(old => old.fill(false).concat());
   };
 
   const submitNewPatient = async (values: PatientFormValues) => {
@@ -60,21 +48,18 @@ const PatientListPage: React.FC = () => {
           </Table.Row>
         </Table.Header>
         <Table.Body>
-          {Object.values(patients).map((patient: Patient, index: number) => (
+          {Object.values(patients).map((patient: Patient) => (
             <Table.Row key={patient.id}>
               <Table.Cell>
-                <Button compact onClick={() => openPatientModal(index)}>{patient.name}</Button>
+                <Button compact as={Link} to={`/patients/${patient.id}`}>
+                  {patient.name}
+                </Button>
               </Table.Cell>
               <Table.Cell>{patient.gender}</Table.Cell>
               <Table.Cell>{patient.occupation}</Table.Cell>
               <Table.Cell>
                 <HealthRatingBar showText={false} rating={1} />
               </Table.Cell>
-              <PatientModal
-                modalOpen={patientModalOpenList[index]}
-                onClose={closePatientModal}
-                patid={patient.id}
-              />
             </Table.Row>
           ))}
         </Table.Body>
