@@ -1,11 +1,12 @@
 import axios from "axios";
 import { apiBaseUrl } from "./constants";
-import { Patient } from "./types";
+import { Diagnosis, Patient } from "./types";
 import {
   setPatientList,
   Action,
   addPatient,
-  getAPatient
+  getAPatient,
+  setDiagnosisList
 } from "./state";
 import { PatientFormValues } from "./AddPatientModal/AddPatientForm";
 type Dispatch = { (value: Action): void; (arg0: Action): void };
@@ -39,4 +40,15 @@ export const fetchPatient = async (dispatch: Dispatch, id: string) => {
     `${apiBaseUrl}/patients/${id}`
   );
   dispatch(getAPatient(patientFromApi));
+};
+
+export const fetchDiagnoses = async (dispatch: Dispatch) => {
+  try {
+    const { data: diagnosesListFromApi} = await axios.get<Diagnosis[]>(
+      `${apiBaseUrl}/diagnoses`
+    );
+    dispatch(setDiagnosisList(diagnosesListFromApi));
+  } catch (e) {
+    console.error(e);
+  }
 };

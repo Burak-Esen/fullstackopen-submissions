@@ -5,7 +5,7 @@ import { Button, Divider, Header, Container } from "semantic-ui-react";
 import PatientModal from "./PatientModal";
 import { apiBaseUrl } from "./constants";
 import { useStateValue } from "./state";
-import { fetchPatientList } from './services';
+import { fetchPatientList, fetchDiagnoses } from './services';
 
 import PatientListPage from "./PatientListPage";
 
@@ -15,6 +15,7 @@ const App: FC = () => {
   useEffect(() => {
     axios.get<void>(`${apiBaseUrl}/ping`);
     fetchPatientList(dispatch);
+    fetchDiagnoses(dispatch);
   }, [dispatch]);
 
   return (
