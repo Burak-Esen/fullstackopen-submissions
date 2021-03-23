@@ -1,4 +1,4 @@
-import { Patient, NewPatient, nonSsnPatient } from '../types';
+import { Patient, NewPatient, nonSsnPatient, NewEntry, Entry } from '../types';
 import {v1 as uuid} from 'uuid';
 import patientsData from '../data/patients';
 
@@ -33,8 +33,18 @@ const addPatient = (obj:NewPatient): Patient => {
   return newP;
 };
 
+const addEntryToPatient = (id: string, obj: NewEntry): Entry => {
+  const newEntry = {
+    id:uuid(),
+    ...obj
+  } as Entry;
+  getAPatient(id)?.entries.push(newEntry);
+  return newEntry;
+};
+
 export default {
   getSafePatients,
   addPatient,
-  getAPatient
+  getAPatient,
+  addEntryToPatient
 };
