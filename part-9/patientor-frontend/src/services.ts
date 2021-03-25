@@ -1,12 +1,9 @@
 import axios from "axios";
 import { apiBaseUrl } from "./constants";
-import { Diagnosis, Patient } from "./types";
+import { Diagnosis, Entry, NewEntry, Patient } from "./types";
 import {
-  setPatientList,
-  Action,
-  addPatient,
-  getAPatient,
-  setDiagnosisList
+  setPatientList, Action, addPatient,
+  getAPatient, setDiagnosisList, addNewEntry
 } from "./state";
 import { PatientFormValues } from "./AddPatientModal/AddPatientForm";
 type Dispatch = { (value: Action): void; (arg0: Action): void };
@@ -51,4 +48,18 @@ export const fetchDiagnoses = async (dispatch: Dispatch) => {
   } catch (e) {
     console.error(e);
   }
+};
+
+export const submitNewEntry = async (
+  patient: Patient,
+  values: NewEntry,
+  dispatch: Dispatch,
+  closeModal: VoidFunction
+) => {
+  const { data: newEntry } = await axios.post<Entry>(
+    `${apiBaseUrl}/patients/${patient.id}/entries`,
+    values
+  );
+  dispatch(addNewEntry(newEntry, patient));
+  closeModal();
 };
