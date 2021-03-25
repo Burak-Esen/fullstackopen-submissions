@@ -7,12 +7,14 @@ export type State = {
   patients: { [id: string]: Patient };
   patient: Patient | undefined;
   diagnoses: { [code: string]: Diagnosis};
+  serviceError: string | undefined;
 };
 
 const initialState: State = {
   patients: {},
   patient: undefined,
-  diagnoses: {}
+  diagnoses: {},
+  serviceError: undefined
 };
 
 const StateContext = createContext<[State, React.Dispatch<Action>]>([

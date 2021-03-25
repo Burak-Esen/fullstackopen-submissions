@@ -20,13 +20,10 @@ const PatientDetails = ({ id }: Props) => {
     setError(undefined);
   };
 
-  const newEntrySubmitHandler = (values: NewEntry) => {
-    if (patient)
-    try {
-      submitNewEntry(patient,values,dispatch,closeModal);
-    } catch (e) {
-      console.error(e.response.data);
-      setError(e.response.data.error);
+  const newEntrySubmitHandler = async (values: NewEntry) => {
+    if (patient){
+      const e = await submitNewEntry(patient,values,dispatch,closeModal);
+      if (e) setError(e.response.data);
     }
   };
   React.useEffect(() => {

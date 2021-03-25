@@ -19,13 +19,9 @@ const PatientListPage: React.FC = () => {
     setError(undefined);
   };
 
-  const submitHandler = (values: PatientFormValues) => {
-    try {
-      submitNewPatient(values,dispatch,closeModal);
-    } catch (e) {
-      console.error(e.response.data);
-      setError(e.response.data.error);
-    }
+  const submitHandler = async (values: PatientFormValues) => {
+    const e = await  submitNewPatient(values,dispatch,closeModal);
+    if (e) setError(e.response.data);
   };
   return (
     <div className="App">

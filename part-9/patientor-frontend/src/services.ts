@@ -24,12 +24,16 @@ export const submitNewPatient = async (
     dispatch: Dispatch,
     closeModal: VoidFunction,
   ) => {
-  const { data: newPatient } = await axios.post<Patient>(
-    `${apiBaseUrl}/patients`,
-    values
-  );
-  dispatch(addPatient(newPatient));
-  closeModal();
+  try {
+    const { data: newPatient } = await axios.post<Patient>(
+      `${apiBaseUrl}/patients`,
+      values
+    );
+    dispatch(addPatient(newPatient));
+    closeModal();
+  } catch (e) {
+    return e;
+  }
 };
 
 export const fetchPatient = async (dispatch: Dispatch, id: string) => {
@@ -56,10 +60,14 @@ export const submitNewEntry = async (
   dispatch: Dispatch,
   closeModal: VoidFunction
 ) => {
-  const { data: newEntry } = await axios.post<Entry>(
-    `${apiBaseUrl}/patients/${patient.id}/entries`,
-    values
-  );
-  dispatch(addNewEntry(newEntry, patient));
-  closeModal();
+  try {
+    const { data: newEntry } = await axios.post<Entry>(
+      `${apiBaseUrl}/patients/${patient.id}/entries`,
+      values
+    );
+    dispatch(addNewEntry(newEntry, patient));
+    closeModal();
+  } catch (e) {
+    return e;
+  }
 };

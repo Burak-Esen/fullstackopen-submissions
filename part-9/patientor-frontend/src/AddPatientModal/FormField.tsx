@@ -93,7 +93,7 @@ export const DiagnosisSelection = ({
 
   const stateOptions = diagnoses.map(diagnosis => ({
     key: diagnosis.code,
-    text: `${diagnosis.name} (${diagnosis.code})`,
+    text: `${diagnosis.name} - (${diagnosis.code})`,
     value: diagnosis.code
   }));
 

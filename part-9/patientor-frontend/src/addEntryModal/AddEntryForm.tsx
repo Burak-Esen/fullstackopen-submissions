@@ -1,11 +1,12 @@
-import React from "react";
-import { Grid, Button } from "semantic-ui-react";
+import React, { useState } from "react";
+import { Grid, Button, Segment } from "semantic-ui-react";
 import { Field, Formik, Form } from "formik";
 
 import { SelectField, EntryTypeOption } from "./FormField";
-import { TextField, DiagnosisSelection } from '../AddPatientModal/FormField';
-import { NewEntry } from "../types";
+import { TextField, DiagnosisSelection, NumberField } from '../AddPatientModal/FormField';
 import { useStateValue } from "../state";
+import { HealthCheckEntry, HospitalEntry, NewEntry, OccupationalHealthcareEntry } from "../types";
+
 
 interface Props {
   onSubmit: (values: NewEntry) => void;
@@ -20,15 +21,40 @@ const entryTypeOptions: EntryTypeOption[] = [
 
 export const AddPatientForm: React.FC<Props> = ({ onSubmit, onCancel }) => {
   const [{ diagnoses }] = useStateValue();
+  const [entryType, setEntryType] = useState<'Hospital'|'HealthCheck'|'OccupationalHealthcare'>('Hospital');
+  const baseInitialValues = {
+    date:'',
+    description:'',
+    specialist:'',
+    diagnosisCodes:[]
+  };
+  const getInitialValues = () => {
+    switch (entryType) {
+      case "HealthCheck":
+        return {
+          ...baseInitialValues,
+          type: 'HealthCheck',
+          healthCheckRating:0
+        } as Omit<HealthCheckEntry, "id">;
+      case "Hospital":
+        return {
+          ...baseInitialValues,
+          type: "Hospital",
+          discharge:{ criteria: '', date: ''}
+        } as Omit<HospitalEntry, "id">;
+      case "OccupationalHealthcare":
+        return {
+          ...baseInitialValues,
+          type: "OccupationalHealthcare",
+          employerName:'',
+          sickLeave:{ startDate:'', endDate:'' }
+        } as Omit<OccupationalHealthcareEntry, "id">;
+    }
+  };
+  const [initialValues, setInitialValues] = useState(getInitialValues());
   return (
     <Formik
-      initialValues={{
-        type: 'Hospital',
-        date: '',
-        description: '',
-        specialist: '',
-        diagnosisCodes: []
-      }}
+      initialValues={initialValues}
       onSubmit = {onSubmit}
       validate={values => {
         const requiredError = "Field is required";
@@ -42,6 +68,9 @@ export const AddPatientForm: React.FC<Props> = ({ onSubmit, onCancel }) => {
         if (!values.specialist) {
           errors.specialist = requiredError;
         }
+        if (values.type === 'HealthCheck' && !values.healthCheckRating) {
+          errors.healthCheckRating = requiredError;
+        }
         return errors;
       }}
     >
@@ -49,6 +78,9 @@ export const AddPatientForm: React.FC<Props> = ({ onSubmit, onCancel }) => {
         return (
           <Form className="form ui">
             <SelectField
+              onChange={setEntryType}
+              setInitialValues={setInitialValues}
+              getInitialValues={getInitialValues}
               label="Entry Type"
               name="entryType"
               options={entryTypeOptions}
@@ -71,6 +103,54 @@ export const AddPatientForm: React.FC<Props> = ({ onSubmit, onCancel }) => {
               name="date"
               component={TextField}
             />
+            { entryType === "HealthCheck" &&
+              <Field
+                label="healthCheckRating"
+                name="healthCheckRating"
+                component={NumberField}
+                min={0}
+                max={3}
+              />
+            }
+            { entryType === "Hospital" &&
+              <Segment>
+                Discharge:
+                <Field 
+                  label="Date"
+                  placeholder="YYYY-MM-DD"
+                  name="discharge.date"
+                  component={TextField}/>
+                <Field 
+                  label="Criteria"
+                  placeholder="Criteria"
+                  name="discharge.criteria"
+                  component={TextField}
+                />
+              </Segment>
+            }
+            { entryType === "OccupationalHealthcare" && [
+              <Field key="0"
+                label="Employer Name"
+                placeholder="Name"
+                name="employerName"
+                component={TextField}
+              />,
+              <Segment key="1">
+                Sick Enter/Leave Dates:
+                <Field 
+                  label="Enter Date"
+                  placeholder="YYYY-MM-DD"
+                  name="sickLeave.startDate"
+                  component={TextField}/>
+                <Field 
+                  label="Leave Date"
+                  placeholder="YYYY-MM-DD"
+                  name="sickLeave.endDate"
+                  component={TextField}
+                />
+              </Segment>
+              ]
+              }
             <DiagnosisSelection
               setFieldValue={setFieldValue}
               setFieldTouched={setFieldTouched}
