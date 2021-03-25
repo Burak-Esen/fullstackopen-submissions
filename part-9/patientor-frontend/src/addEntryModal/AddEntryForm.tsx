@@ -34,13 +34,13 @@ export const AddPatientForm: React.FC<Props> = ({ onSubmit, onCancel }) => {
         const requiredError = "Field is required";
         const errors: { [field: string]: string } = {};
         if (!values.date) {
-          errors.name = requiredError;
+          errors.date = requiredError;
         }
         if (!values.description) {
-          errors.ssn = requiredError;
+          errors.description = requiredError;
         }
         if (!values.specialist) {
-          errors.dateOfBirth = requiredError;
+          errors.specialist = requiredError;
         }
         return errors;
       }}
